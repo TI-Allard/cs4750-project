@@ -28,7 +28,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <html>
 <head>
   <meta charset="UTF-8">  
-  <p><?php if ($authenticated != null) {
+  <p><?php if ($authenticated ==1) { //used to be != null
     echo $_POST['username'];
     }
     else {

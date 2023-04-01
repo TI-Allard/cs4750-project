@@ -77,6 +77,8 @@ $dsn = "mysql:host=$host;dbname=$dbname";
 // Syntax: 
 //    new PDO(dsn, username, password);
 
+//random
+
 
 /** connect to the database **/
 try 

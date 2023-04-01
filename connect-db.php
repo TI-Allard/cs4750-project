@@ -45,7 +45,7 @@
 $username = 'nln5awc'; 
 $password = 'UpsornWinter2023';
 $host = 'mysql01.cs.virginia.edu';
-$dbname = 'nln5awc';
+$dbname = 'nln5awc_a';
 $dsn = "mysql:host=$host;dbname=$dbname";
 ////////////////////////////////////////////
 

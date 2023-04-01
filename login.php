@@ -5,7 +5,7 @@ require("functions.php");
 $authenticated = null;
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
-		$authenticated = authenticateUser($_POST['username'], $_POST['password']);
+		$authenticated = authenticateUser($_POST['username'], $_POST['pswd']);
 		//var_dump($friend_info_to_update);
 	}
 	// else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Add friend")){
@@ -54,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
   </div>  
   <div class="row mb-3 mx-3">
     Password:
-    <input type="text" class="form-control" name="password" required />
+    <input type="text" class="form-control" name="pswd" required />
   </div>
   <div class="row mb-3 mx-3">
     <input type="submit" class="btn btn-primary" name="actionBtn" value="Login" title="click to log in" />        

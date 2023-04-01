@@ -28,7 +28,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <html>
 <head>
   <meta charset="UTF-8">  
+  <p><?php if ($authenticated != null) {
+    echo $_POST['username'];
+    }
+    else {
+        echo "login failed";
+        echo $authenticated;
+        echo $_POST['username'];
+        echo $_POST['pswd'];
+    } 
+    var_dump($authenticated);
+    ?>
   
+  
+  </p>
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="your name">
@@ -46,7 +59,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <body>
 <div class="container">
   <h1>Login</h1>
-
   <form name="mainForm" action="home.php" method="post">   
   <div class="row mb-3 mx-3">
     Username:

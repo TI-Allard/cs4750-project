@@ -19,13 +19,14 @@
 //      execute() actually executes the SQL statement
 
 
-function authenticateUser($username, $password)
+function authenticateUser($username, $pswd)
 {
 	global $db;
-	$query = "SELECT  COUNT(*)  FROM Profile WHERE username = :username AND password = :password";
+	//$query = "SELECT  COUNT(*)  FROM Profile WHERE username = :username AND pswd = :pswd";
+    $query = "SELECT * FROM Profile WHERE username = :username AND pswd = :pswd";
 	$statement = $db->prepare($query);
     $statement->bindValue(':username', $username);
-    $statement->bindValue(':password', $password);
+    $statement->bindValue(':pswd', $pswd);
 	$statement->execute();
 	
 	// fetchAll() returns an array for all of the rows in the result set

@@ -1,7 +1,7 @@
 <?php
 require("connect-db.php");
 require("functions.php");
-// $friends = selectAllFriends();
+$books = selectAllBooks();
 $authenticated = null;
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
@@ -57,24 +57,25 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 
 <body>
-<div class="container">
-  <h1>Login</h1>
-  <form name="mainForm" action="home.php" method="post">   
-  <div class="row mb-3 mx-3">
-    Username:
-    <input type="text" class="form-control" name="username" required />
-  </div>  
-  <div class="row mb-3 mx-3">
-    Password:
-    <input type="text" class="form-control" name="password" required />
-  </div>
-  <div class="row mb-3 mx-3">
-    <input type="submit" class="btn btn-primary" name="actionBtn" value="Login" title="click to log in" />        
-  </div>
-  </form>    
-
-   
-  
-</div>    
+<div class="row justify-content-center">  
+<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+  <thead>
+  <tr style="background-color:#B0B0B0">
+    <th>Title</th>
+  </tr>
+  </thead>
+<?php foreach ($books as $item): ?>
+  <tr>
+     <td><?php echo $item['title']; ?></td>
+     <td>
+       <form action="bookinfo.php" method="post">
+         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+         <input type="text" name="book_to_view" value="<?php echo $item['title']; ?>"/>
+       </form>
+     </td>            
+  </tr>
+<?php endforeach; ?>
+</table>
+</div>       
 </body>
 </html>

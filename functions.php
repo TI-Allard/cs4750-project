@@ -40,6 +40,29 @@ function authenticateUser($username, $pswd)
 	return $count;
 }
 
+function selectAllBooks(){
+    // db
+    global $db;
+
+    // query
+    $query = "SELECT * FROM Book";
+
+    // prepare
+    $statement = $db->prepare($query);
+    
+    // execute
+    $statement->execute();
+
+    // retrieve
+    $results = $statement->fetchAll(); // fetch()
+
+    // close cursor
+    $statement->closeCursor();
+
+    // return result
+    return $results;
+}
+
 
 
 // CODE FROM CLASS

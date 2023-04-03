@@ -65,6 +65,39 @@ function selectAllBooks(){
     return $results;
 }
 
+function selectFeaturedBooks(){
+    // db
+    global $db;
+
+    // query
+    $query = "SELECT * FROM Book LIMIT 5";
+
+    // prepare
+    $statement = $db->prepare($query);
+    
+    // execute
+    $statement->execute();
+
+    // retrieve
+    $results = $statement->fetchAll(); // fetch()
+
+    // close cursor
+    $statement->closeCursor();
+
+    // return result
+    return $results;
+}
+
+function getBookByTitle($title){
+    global $db;
+    $query = "select * from Book where title=:title";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':title', $title);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
 
 
 // CODE FROM CLASS

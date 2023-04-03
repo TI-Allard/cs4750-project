@@ -2,12 +2,12 @@
 require("connect-db.php");
 require("functions.php");
 $books = selectAllBooks();
-$authenticated = null;
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
-		$authenticated = authenticateUser($_POST['username'], $_POST['password']);
-		//var_dump($friend_info_to_update);
-	}
+// $authenticated = null;
+// if($_SERVER['REQUEST_METHOD'] == 'POST'){
+// 	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
+// 		$authenticated = authenticateUser($_POST['username'], $_POST['password']);
+// 		var_dump($$authenticated);
+// 	}
 	// else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Add friend")){
 	// 	addFriend($_POST['name'], $_POST['major'], $_POST['year']);
 	// 	$friends = selectAllFriends();
@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	// 	updateFriend($_POST['name'], $_POST['major'], $_POST['year']);
 	// 	$friends = selectAllFriends();
 	// }
-}
+//}
 
 ?>
 
@@ -28,19 +28,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <html>
 <head>
   <meta charset="UTF-8">  
-  <p><?php if ($authenticated ==1) { //used to be != null
-    echo $_POST['username'];
-    }
-    else {
-        echo "login failed";
-        echo $authenticated;
-        echo $_POST['username'];
-        echo $_POST['pswd'];
-    } 
-    var_dump($authenticated);
-    ?>
-  
-  
   </p>
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,7 +57,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
      <td>
        <form action="bookinfo.php" method="post">
          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-         <input type="text" name="book_to_view" value="<?php echo $item['title']; ?>"/>
+         <input type="hidden" name="book_to_view" value="<?php echo $item['title']; ?>"/>
        </form>
      </td>            
   </tr>

@@ -23,7 +23,9 @@ function authenticateUser($username, $pswd)
 {
 	global $db;
 	//$query = "SELECT  COUNT(*)  FROM Profile WHERE username = :username AND pswd = :pswd";
-    $query = "SELECT COUNT(*) FROM Profile WHERE username = :username AND pswd = :pswd";
+    //printf("username " + $username);
+    //printf("password " + $pswd);
+    $query = "SELECT * FROM Profile WHERE username = :username AND pswd = :pswd";
 	$statement = $db->prepare($query);
     $statement->bindValue(':username', $username);
     $statement->bindValue(':pswd', $pswd);

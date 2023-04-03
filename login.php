@@ -47,7 +47,21 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <div class="container">
   <h1>Login</h1>
 
-  <form name="mainForm" action="home.php" method="post">   
+  <p><?php if ($authenticated == "1") { //used to be != null
+    echo "Hi ";
+    echo $_POST['username'];
+    echo ", welcome to our library!";
+    //echo $authenticated;
+    }
+    else {
+        echo "I'm sorry, ";
+        echo $_POST['username'];
+        echo " the username or password you entered was incorrect.";
+    } 
+    //var_dump($authenticated);
+    ?>
+
+  <form name="mainForm" action="login.php" method="post">   
   <div class="row mb-3 mx-3">
     Username:
     <input type="text" class="form-control" name="username" required />

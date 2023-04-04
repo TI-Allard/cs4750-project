@@ -30,12 +30,12 @@ function authenticateUser($username, $pswd)
 	$statement = $db->prepare($query);
     $statement->bindValue(':username', $username);
     $statement->bindValue(':pswd', $pswd);
-	$statement->execute();
+	$statement->execute();http://www.cs.virginia.edu/~
 
     $count = $statement->rowCount(); 
     if($count == "1"){
         $uname = $username;
-        printf("hi naomi");
+        printf($uname);
     }
 	
 	// fetchAll() returns an array for all of the rows in the result set
@@ -49,6 +49,17 @@ function authenticateUser($username, $pswd)
 
 function setUNAME($username){
     $uname = $username;
+}
+
+function getReviewsForBook($isbn){
+    global $db;
+    $query = "SELECT * FROM Review WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$results = $statement->fetchAll();
+	$statement->closeCursor();
+	return $results;
 }
 
 function selectAllBooks(){

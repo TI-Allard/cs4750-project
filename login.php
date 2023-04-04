@@ -88,6 +88,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <thead>
           <tr style="background-color:#B0B0B0">
             <th>Check out our featured books</th>
+            <th>View</th>
           </tr>
         </thead>
         <?php foreach ($featuredbooks as $item): ?>

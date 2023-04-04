@@ -18,6 +18,7 @@
 //                Thus, be sure to match the name; a mismatch is ignored.
 //      execute() actually executes the SQL statement
 
+$uname = null;
 
 function authenticateUser($username, $pswd)
 {
@@ -32,6 +33,10 @@ function authenticateUser($username, $pswd)
 	$statement->execute();
 
     $count = $statement->rowCount(); 
+    if($count == "1"){
+        $uname = $username;
+        printf("hi naomi");
+    }
 	
 	// fetchAll() returns an array for all of the rows in the result set
 	// $results = $statement->fetch();
@@ -40,6 +45,10 @@ function authenticateUser($username, $pswd)
 	$statement->closecursor();
 	
 	return $count;
+}
+
+function setUNAME($username){
+    $uname = $username;
 }
 
 function selectAllBooks(){
@@ -93,6 +102,17 @@ function getBookByTitle($title){
     $query = "select * from Book where title=:title";
 	$statement = $db->prepare($query);
 	$statement->bindValue(':title', $title);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
+
+function getBookByISBN($isbn){
+    global $db;
+    $query = "select * from Book where isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
 	$statement->execute();
 	$result = $statement->fetch();
 	$statement->closeCursor();

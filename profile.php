@@ -1,7 +1,7 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $thisbook = getBookByISBN($_POST['book_to_view']);
+  
 ?>
 
 <!DOCTYPE html>
@@ -34,11 +34,11 @@
   </div>
 </nav>
 <br>
-    <h1> <?php echo $_POST['book_to_view'];?> </h1>
+    <h1> <?php echo $uname;?> </h1>
     <p>
-      This book is called <?php echo $thisbook['title']?> by <?php echo $thisbook['author']?>.
+      hi <?php echo $uname;?>.
       <br>
-      Published Date: <?php echo $thisbook['date_published']?>
+      
     </p>
 
   </body>

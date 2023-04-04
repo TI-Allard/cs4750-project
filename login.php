@@ -48,7 +48,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 
 <body>
-<div class="container">
+  <!-- nav bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Our Library</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="home.php">Browse Books</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="profile.php">Profile</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<br>
   <h1>Welcome to Our Library!</h1>
 
   <p><?php if ($authenticated == "1") { //used to be != null
@@ -65,6 +82,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     //var_dump($authenticated);
     ?>
   <?php if($authenticated == "1"): ?>
+    <?php setUNAME($_POST['username']) ?>
     <div class="row justify-content-center">  
       <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
         <thead>
@@ -78,7 +96,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <td>
               <form action="bookinfo.php" method="post">
                 <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-                <input type="hidden" name="book_to_view" value="<?php echo $item['title']; ?>"/>
+                <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
               </form>
             </td>            
           </tr>
@@ -101,7 +119,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     </form>    
   <?php endif; ?>
    
-  
-</div>    
+     
 </body>
 </html>

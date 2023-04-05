@@ -1,8 +1,7 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $thisbook = getBookByISBN($_POST['book_to_view']);
-  $reviews = getReviewsForBook($_POST['book_to_view'])
+  
 ?>
 
 <!DOCTYPE html>
@@ -35,37 +34,12 @@
   </div>
 </nav>
 <br>
-    <h1> <?php echo $thisbook['title'];?> </h1>
+    <h1> <?php echo $uname;?> </h1>
     <p>
-      Title: <?php echo $thisbook['title']?>
+      hi <?php echo $uname;?>.
       <br>
-      Author: <?php echo $thisbook['author']?>.
-      <br>
-      Published Date: <?php echo $thisbook['date_published']?>
-      <br>
-      ISBN: <?php echo $thisbook['isbn']?>
-      <br>
+      
     </p>
-    <div class="row justify-content-center">  
-      <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-        <thead>
-          <tr style="background-color:#B0B0B0">
-            <th>Author</th>
-            <th>Title</th>
-            <th>Review Content</th>
-          </tr>
-        </thead>
-        <?php foreach ($reviews as $item): ?>
-          <tr>
-            <td><?php echo $item['username']; ?></td>
-            <td><?php echo $item['title']; ?></td>  
-            <td><?php echo $item['body']; ?></td>           
-          </tr>
-        <?php endforeach; ?>
-      </table>
-    </div>
-
-
 
   </body>
 </html>

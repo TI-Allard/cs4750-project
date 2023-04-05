@@ -1,26 +1,7 @@
 <?php
-require("connect-db.php");
-require("functions.php");
-$books = selectAllBooks();
-$authenticated = null;
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
-		$authenticated = authenticateUser($_POST['username'], $_POST['password']);
-		//var_dump($friend_info_to_update);
-	}
-	// else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Add friend")){
-	// 	addFriend($_POST['name'], $_POST['major'], $_POST['year']);
-	// 	$friends = selectAllFriends();
-	// }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
-	// 	deleteFriend($_POST['friend_to_delete']);
-	// 	$friends = selectAllFriends();
-	// }
-	// if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Confirm update")){
-	// 	updateFriend($_POST['name'], $_POST['major'], $_POST['year']);
-	// 	$friends = selectAllFriends();
-	// }
-}
-
+  require("connect-db.php");
+  require("functions.php");
+  $books = selectAllBooks();
 ?>
 
 <!-- 1. create HTML5 doctype -->
@@ -28,26 +9,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <html>
 <head>
   <meta charset="UTF-8">  
-  <p><?php if ($authenticated ==1) { //used to be != null
-    echo $_POST['username'];
-    }
-    else {
-        echo "login failed";
-        echo $authenticated;
-        echo $_POST['username'];
-        echo $_POST['pswd'];
-    } 
-    var_dump($authenticated);
-    ?>
-  
-  
   </p>
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">  
     
-  <title>Login Page</title>
+  <title>Library</title>
    
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   
@@ -57,11 +25,31 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 
 <body>
+<!-- nav bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Our Library</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="home.php">Browse Books</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="profile.php">Profile</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<br>
+<!-- book table -->
 <div class="row justify-content-center">  
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">
     <th>Title</th>
+    <th>Book Information</th>
   </tr>
   </thead>
 <?php foreach ($books as $item): ?>
@@ -70,12 +58,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
      <td>
        <form action="bookinfo.php" method="post">
          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-         <input type="text" name="book_to_view" value="<?php echo $item['title']; ?>"/>
+         <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
        </form>
      </td>            
   </tr>
 <?php endforeach; ?>
 </table>
-</div>       
+</div>  
+<!-- end of book table -->
+
 </body>
 </html>

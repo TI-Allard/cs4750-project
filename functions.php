@@ -18,18 +18,25 @@
 //                Thus, be sure to match the name; a mismatch is ignored.
 //      execute() actually executes the SQL statement
 
+$uname = null;
 
 function authenticateUser($username, $pswd)
 {
 	global $db;
 	//$query = "SELECT  COUNT(*)  FROM Profile WHERE username = :username AND pswd = :pswd";
-    $query = "SELECT COUNT(*) FROM Profile WHERE username = :username AND pswd = :pswd";
+    //printf("username " + $username);
+    //printf("password " + $pswd);
+    $query = "SELECT * FROM Profile WHERE username = :username AND pswd = :pswd";
 	$statement = $db->prepare($query);
     $statement->bindValue(':username', $username);
     $statement->bindValue(':pswd', $pswd);
-	$statement->execute();
+	$statement->execute();http://www.cs.virginia.edu/~
 
     $count = $statement->rowCount(); 
+    if($count == "1"){
+        $uname = $username;
+        printf($uname);
+    }
 	
 	// fetchAll() returns an array for all of the rows in the result set
 	// $results = $statement->fetch();
@@ -38,6 +45,21 @@ function authenticateUser($username, $pswd)
 	$statement->closecursor();
 	
 	return $count;
+}
+
+function setUNAME($username){
+    $uname = $username;
+}
+
+function getReviewsForBook($isbn){
+    global $db;
+    $query = "SELECT * FROM Review WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$results = $statement->fetchAll();
+	$statement->closeCursor();
+	return $results;
 }
 
 function selectAllBooks(){
@@ -63,6 +85,50 @@ function selectAllBooks(){
     return $results;
 }
 
+function selectFeaturedBooks(){
+    // db
+    global $db;
+
+    // query
+    $query = "SELECT * FROM Book LIMIT 5";
+
+    // prepare
+    $statement = $db->prepare($query);
+    
+    // execute
+    $statement->execute();
+
+    // retrieve
+    $results = $statement->fetchAll(); // fetch()
+
+    // close cursor
+    $statement->closeCursor();
+
+    // return result
+    return $results;
+}
+
+function getBookByTitle($title){
+    global $db;
+    $query = "select * from Book where title=:title";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':title', $title);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
+
+function getBookByISBN($isbn){
+    global $db;
+    $query = "select * from Book where isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
 
 
 // CODE FROM CLASS

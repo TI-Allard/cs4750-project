@@ -60,6 +60,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <a class="nav-link" href="home.php">Browse Books</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="lib-event.php">Library Events</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="profile.php">Profile</a>
       </li>
     </ul>

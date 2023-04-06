@@ -51,6 +51,49 @@ function setUNAME($username){
     $uname = $username;
 }
 
+function selectAllLibEvents(){
+    // db
+    global $db;
+    // query
+    $query = "SELECT * FROM LibEvent";
+    // prepare
+    $statement = $db->prepare($query);
+    // execute
+    $statement->execute();
+    // retrieve
+    $results = $statement->fetchAll(); // fetch()
+    // close cursor
+    $statement->closeCursor();
+    // return result
+    return $results;
+}
+
+function getContest($event_id){
+    global $db;
+
+    $query = "SELECT * FROM Contest WHERE event_id=:event_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':event_id', $event_id);
+    $statement->execute();
+    $results = $statement->fetchAll(); // fetch()
+    $statement->closeCursor();
+
+    return $results;
+}
+
+function getReading($event_id){
+    global $db;
+
+    $query = "SELECT * FROM Reading WHERE event_id=:event_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':event_id', $event_id);
+    $statement->execute();
+    $results = $statement->fetchAll(); // fetch()
+    $statement->closeCursor();
+
+    return $results;
+}
+
 function getReviewsForBook($isbn){
     global $db;
     $query = "SELECT * FROM Review WHERE isbn=:isbn";

@@ -45,6 +45,8 @@
       <br>
       ISBN: <?php echo $thisbook['isbn']?>
       <br>
+      Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>
+      <br>
     </p>
     <div class="row justify-content-center">  
       <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">

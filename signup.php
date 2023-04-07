@@ -1,3 +1,5 @@
+<!-- https://www.youtube.com/watch?v=gCo6JqGMi30 -->
+
 <?php
 require("connect-db.php");
 require("functions.php");
@@ -69,63 +71,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
   </div>
 </nav>
 <br>
-  <!-- <h1>Welcome to Our Library!</h1>
 
-  <p><?php if ($authenticated == "1") { //used to be != null
-    echo "Hi ";
-    echo $_POST['username'];
-    echo ", welcome to our library!";
-    //echo $authenticated;
-    }
-    else if($loginAttempted){
-        echo "I'm sorry, ";
-        echo $_POST['username'];
-        echo " the username or password you entered was incorrect.";
-    } 
-    //var_dump($authenticated);
-    ?>
-  <?php if($authenticated == "1"): ?>
-    <?php setUNAME($_POST['username']) ?>
-    <div class="row justify-content-center">  
-      <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-        <thead>
-          <tr style="background-color:#B0B0B0">
-            <th>Check out our featured books</th>
-            <th>View</th>
-          </tr>
-        </thead>
-        <?php foreach ($featuredbooks as $item): ?>
-          <tr>
-            <td><?php echo $item['title']; ?></td>
-            <td>
-              <form action="bookinfo.php" method="post">
-                <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-                <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
-              </form>
-            </td>            
-          </tr>
-        <?php endforeach; ?>
-      </table>
-    </div>
-  <?php else: ?>
-    <form name="mainForm" action="login.php" method="post">   
-    <div class="row mb-3 mx-3">
-      Username:
-      <input type="text" class="form-control" name="username" required />
-    </div>  
-    <div class="row mb-3 mx-3">
-      Password:
-      <input type="text" class="form-control" name="pswd" required />
-    </div>
-    <div class="row mb-3 mx-3">
-      <input type="submit" class="btn btn-primary" name="actionBtn" value="Login" title="click to log in" />        
-    </div>
-    </form>    
-  <?php endif; ?> -->
-   
-  <section>
-    <h1>Log In</h2>
-    <form action="./includes/login.inc.php" method="post">
+<section>
+    <h1>Sign Up</h2>
+    <form action="./includes/signup.inc.php" method="post">
     <div class="row mb-3 mx-3">
         <input type="text" name="username" placeholder="Username...">
     </div>
@@ -133,10 +82,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <input type="password" name="pswd" placeholder="Password...">
     </div>
     <div class="row mb-3 mx-3">
+        <input type="password" name="pswdrepeat" placeholder="Repeat Password...">
+    </div>
+    <div class="row mb-3 mx-3">
         <button type="submit" name="submit">Sign Up</button>
     </div>
     </form>
 </section>
+   
      
 </body>
 </html>

@@ -3,9 +3,9 @@
   require("functions.php");
 //   $thisbook = getBookByISBN($_POST['book_to_view']);
 //   $reviews = getReviewsForBook($_POST['book_to_view']);
-  $libevents = selectAllLibEvents(); 
+  $libevents = getEvents(); //selectAllLibEvents(); 
   $readings = null;//selectAllReadings(); 
-  $contests = null //selectAllContests(); 
+  $contests = null;  //selectAllContests(); 
 ?>
 
 
@@ -50,7 +50,8 @@
     <th>Library Events</th>
     <th>Competition</th>
     <th>Prize</th>
-    <th>Date Opened</th>
+    <th>Date Opens</th>
+    <th>Date Closes</th>
   </tr>
   </thead>
 <?php foreach ($libevents as $item): ?>
@@ -59,11 +60,10 @@
     <?php $contests = getContest($item['event_id']); ?>
   </tr> 
   <tr>
-     <td><?php echo $item['event_id']; ?></td>
-     <td><?php echo getContest($item['event_id'])['content']; ?></td>
+     <td><?php echo $item['content']; ?></td>
      <td><?php echo $contests['prize']; ?></td>
-
      <td><?php echo date("F jS, Y", strtotime($item['event_datetime'])); ?></td>
+     <td><?php echo date("F jS, Y", strtotime($contests['date_closed'])); ?></td>
      <!-- <td>
        <form action="bookinfo.php" method="post">
          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>

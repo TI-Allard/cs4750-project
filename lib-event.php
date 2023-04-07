@@ -7,6 +7,7 @@
   $readinglibevents = getReadingEvents(); 
   $readings = null;//selectAllReadings(); 
   $contests = null;  //selectAllContests(); 
+  session_start(); 
 ?>
 
 

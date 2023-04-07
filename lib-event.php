@@ -43,12 +43,12 @@
   </div>
 </nav>
 <br>
+<h3> Contests </h3>
 <!-- book table -->
 <div class="row justify-content-center">  
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">
-    <th>Library Events</th>
     <th>Competition</th>
     <th>Prize</th>
     <th>Date Opens</th>
@@ -70,7 +70,7 @@
 </div>  
 <!-- end of book table -->
 
-
+<h3> Reading Events </h3>
 
 <div class="row justify-content-center">  
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
@@ -86,13 +86,7 @@
   </tr> 
   <tr>
      <td><?php echo $item['reader']; ?></td>
-     <td><?php echo date("F jS, Y", strtotime($item['event_datetime'])); ?></td>
-     <!-- <td>
-       <form action="bookinfo.php" method="post">
-         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-         <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
-       </form>
-     </td>             -->
+     <td><?php echo date("F jS, Y g:i", strtotime($item['event_datetime'])); ?></td>
   </tr>
 <?php endforeach; ?>
 </table>

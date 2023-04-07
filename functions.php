@@ -68,6 +68,30 @@ function selectAllLibEvents(){
     return $results;
 }
 
+function getContestEvents(){
+    global $db;
+
+    $query = "SELECT * FROM Contest NATURAL JOIN LibEvent";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll(); // fetch()
+    $statement->closeCursor();
+
+    return $results;
+}
+
+function getReadingEvents(){
+    global $db;
+
+    $query = "SELECT * FROM Reading NATURAL JOIN LibEvent";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll(); // fetch()
+    $statement->closeCursor();
+
+    return $results;
+}
+
 function getContest($event_id){
     global $db;
 
@@ -75,7 +99,7 @@ function getContest($event_id){
     $statement = $db->prepare($query);
     $statement->bindValue(':event_id', $event_id);
     $statement->execute();
-    $results = $statement->fetchAll(); // fetch()
+    $results = $statement->fetch(); // fetch()
     $statement->closeCursor();
 
     return $results;
@@ -88,7 +112,7 @@ function getReading($event_id){
     $statement = $db->prepare($query);
     $statement->bindValue(':event_id', $event_id);
     $statement->execute();
-    $results = $statement->fetchAll(); // fetch()
+    $results = $statement->fetch(); // fetch()
     $statement->closeCursor();
 
     return $results;

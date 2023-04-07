@@ -68,10 +68,22 @@ function selectAllLibEvents(){
     return $results;
 }
 
-function getEvents(){
+function getContestEvents(){
     global $db;
 
     $query = "SELECT * FROM Contest NATURAL JOIN LibEvent";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll(); // fetch()
+    $statement->closeCursor();
+
+    return $results;
+}
+
+function getReadingEvents(){
+    global $db;
+
+    $query = "SELECT * FROM Reading NATURAL JOIN LibEvent";
     $statement = $db->prepare($query);
     $statement->execute();
     $results = $statement->fetchAll(); // fetch()

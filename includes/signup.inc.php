@@ -1,19 +1,20 @@
 <?php
 //echo "help";
 if(isset($_POST["submit"])) {
-    $uname = $_POST["username"];
+    $userN = $_POST["userN"];
     $pswd = $_POST["pswd"];
     $pswdRepeat = $_POST["pswdrepeat"];
     //echo "help1";
     require("../connect-db.php");
     require("functions.inc.php");
     //echo "help2";
-    if(emptyInputSignup($uname, $pswd, $pswdRepeat) !== false) {
+    if(emptyInputSignup($userN, $pswd, $pswdRepeat) !== false) {
         header("location: ../signup.php?error=emptyinput");
+        //echo var_dump(($userN),($pswd));
         exit();
     }
     //echo "help3";
-    if(invalidUsername($uname) !== false) {
+    if(invalidUsername($userN) !== false) {
         header("location: ../signup.php?error=invalidUsername");
         exit();
     }
@@ -23,13 +24,13 @@ if(isset($_POST["submit"])) {
         exit();
     }
     //echo "help5";
-    if(usernameExists($uname) !== false) {
+    if(usernameExists($userN) !== false) {
         header("location: ../signup.php?error=usernametaken");
         exit();
     }
     //echo "help6";
 
-    createUser($uname, $pswd);
+    createUser($userN, $pswd);
     //echo "help7";
 }
 else {

@@ -1,29 +1,30 @@
 <?php
 require("connect-db.php");
 require("functions.php");
+session_start();
 // $friends = selectAllFriends();
-$authenticated = null;
-$loggedin = false;
-$loginAttempted = false;
-$featuredbooks = selectFeaturedBooks();
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
-		$authenticated = authenticateUser($_POST['username'], $_POST['pswd']);
-    $loginAttempted = true;
-		//var_dump($friend_info_to_update);
-	}
-	// else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Add friend")){
-	// 	addFriend($_POST['name'], $_POST['major'], $_POST['year']);
-	// 	$friends = selectAllFriends();
-	// }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
-	// 	deleteFriend($_POST['friend_to_delete']);
-	// 	$friends = selectAllFriends();
-	// }
-	// if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Confirm update")){
-	// 	updateFriend($_POST['name'], $_POST['major'], $_POST['year']);
-	// 	$friends = selectAllFriends();
-	// }
-}
+// $authenticated = null;
+// $loggedin = false;
+// $loginAttempted = false;
+// $featuredbooks = selectFeaturedBooks();
+// if($_SERVER['REQUEST_METHOD'] == 'POST'){
+// 	if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Login")){
+// 		$authenticated = authenticateUser($_POST['username'], $_POST['pswd']);
+//     $loginAttempted = true;
+// 		//var_dump($friend_info_to_update);
+// 	}
+// 	// else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Add friend")){
+// 	// 	addFriend($_POST['name'], $_POST['major'], $_POST['year']);
+// 	// 	$friends = selectAllFriends();
+// 	// }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
+// 	// 	deleteFriend($_POST['friend_to_delete']);
+// 	// 	$friends = selectAllFriends();
+// 	// }
+// 	// if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Confirm update")){
+// 	// 	updateFriend($_POST['name'], $_POST['major'], $_POST['year']);
+// 	// 	$friends = selectAllFriends();
+// 	// }
+// }
 
 ?>
 
@@ -49,7 +50,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 <body>
   <!-- nav bar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Our Library</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -62,9 +63,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
       <li class="nav-item">
         <a class="nav-link" href="lib-event.php">Library Events</a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" href="profile.php">Profile</a>
-      </li>
+      </li> -->
+      <?php
+        if(isset($_SESSION["userN"])) {
+          echo "<li class='nav-item active'><a class='nav-link' href='profile.php'>Profile</a></li>";
+          echo "<li class='nav-item active'><a class='nav-link' href='logout.php'>Log out</a></li>";
+        }
+        else {
+          echo "<li class='nav-item active'><a class='nav-link' href='login.php'>Log In</a></li>";
+          echo "<li class='nav-item active'><a class='nav-link' href='signup.php'>Sign Up</a></li>";
+        }
+      ?>
+      
     </ul>
   </div>
 </nav>
@@ -127,15 +139,26 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <h1>Log In</h2>
     <form action="./includes/login.inc.php" method="post">
     <div class="row mb-3 mx-3">
-        <input type="text" name="username" placeholder="Username...">
+        <input type="text" name="userN" placeholder="Username...">
     </div>
     <div class="row mb-3 mx-3">
         <input type="password" name="pswd" placeholder="Password...">
     </div>
     <div class="row mb-3 mx-3">
-        <button type="submit" name="submit">Sign Up</button>
+        <button type="submit" name="submit">Log In</button>
     </div>
     </form>
+    <?php
+	if(isset($_GET["error"])){
+		if($_GET["error"] == "emptyinput") {
+			echo "<p>Please ensure you fill in all fields.</p>";
+		}
+		else if($_GET["error"] == "wronglogin"){
+			echo "<p>Incorrect login information.</p>";
+		}
+	}
+
+?>  
 </section>
      
 </body>

@@ -1,7 +1,7 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  
+  session_start();
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +17,7 @@
   </head>
   <body>
     <!-- nav bar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Our Library</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -30,19 +30,29 @@
       <li class="nav-item">
         <a class="nav-link" href="lib-event.php">Library Events</a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" href="profile.php">Profile</a>
-      </li>
+      </li> -->
+      <?php
+        if(isset($_SESSION["userN"])) {
+          echo "<li class='nav-item active'><a class='nav-link' href='profile.php'>Profile</a></li>";
+          echo "<li class='nav-item active'><a class='nav-link' href='logout.php'>Log out</a></li>";
+        }
+        else {
+          echo "<li class='nav-item active'><a class='nav-link' href='login.php'>Log In</a></li>";
+          echo "<li class='nav-item active'><a class='nav-link' href='signup.php'>Sign Up</a></li>";
+        }
+      ?>
+      
     </ul>
   </div>
 </nav>
 <br>
-    <h1> <?php echo $uname;?> </h1>
-    <p>
-      hi <?php echo $uname;?>.
-      <br>
-      
-    </p>
+<?php
+        if(isset($_SESSION["userN"])) {
+          echo "<p>Hello " . $_SESSION["userN"] . ". Nice to meet you.</p>";
+        }
+      ?>
 
   </body>
 </html>

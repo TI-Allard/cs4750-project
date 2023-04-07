@@ -1,8 +1,9 @@
 <?php
 require("../connect-db.php");
-function emptyInputSignup($uname, $pswd, $pswdRepeat) {
+function emptyInputSignup($userN, $pswd, $pswdRepeat) {
     //$result
-    if (empty($uname) || empty($pswd) || empty($pswdRepeat)){
+    //echo var_dump(($userN),($pswd));
+    if (empty($userN) || empty($pswd) || empty($pswdRepeat)){
         $result = true;
     }
     else {
@@ -11,9 +12,9 @@ function emptyInputSignup($uname, $pswd, $pswdRepeat) {
     return $result;
 }
 
-function invalidUsername($uname) {
+function invalidUsername($userN) {
     //$result
-    if (!preg_match("/^[a-zA-Z0-9]*$/", $uname)){
+    if (!preg_match("/^[a-zA-Z0-9]*$/", $userN)){
         $result = true;
     }
     else {
@@ -33,12 +34,12 @@ function pswdMatch($pswd, $pswdRepeat) {
     return $result;
 }
 
-function usernameExists($uname) {
+function usernameExists($userN) {
     //$result
     global $db;
     $query = "SELECT * FROM Profile WHERE username = :username;";
 	$statement = $db->prepare($query);
-    $statement->bindValue(':username', $uname);
+    $statement->bindValue(':username', $userN);
     $statement->execute();
     if ($results = $statement->fetch()) {
         $statement->closeCursor();
@@ -51,26 +52,60 @@ function usernameExists($uname) {
     }
 }
 
-function createUser($uname, $pswd) {
+function createUser($userN, $pswd) {
     //$result
     date_default_timezone_set('America/New_York');
     $date = date('Y-m-d h:i:s', time()); 
     global $db;
     $query = "INSERT INTO Profile (username, pswd, date_of_membership) VALUES (:username, :pswd, :dte)";
 	$statement = $db->prepare($query);
-    echo "help8";
-    echo $uname;
-    echo $pswd;
+    //echo "help8";
+    //echo $userN;
+    //echo $pswd;
     //$hashedPswd = password_hash($pswd, PASSWORD_DEFAULT);
-    echo "help9";
-    $statement->bindValue(':username', $uname);
+    //echo "help9";
+    $statement->bindValue(':username', $userN);
     $statement->bindValue(':pswd', $pswd);
     $statement->bindValue(':dte', $date);
     $statement->execute();
     $statement->closeCursor();
-    echo "help10";
+    //echo "help10";
     header("location: ../signup.php?error=none");
     exit();
+}
+
+
+function emptyInputLogin($userN, $pswd) {
+    //$result
+    //echo var_dump(($userN),($pswd));
+    if (empty($userN) || empty($pswd)){
+        $result = true;
+    }
+    else {
+        $result = false;
+    }
+    return $result;
+}
+
+function loginUser($userN, $pswd) {
+    $userExists = usernameExists($userN);
+    if($userExists === false) {
+        header("location: ../login.php?error=wronglogin");
+        exit();
+    }
+
+    $existingPswd = $userExists["pswd"];
+    
+    if($existingPswd !== $pswd){
+        header("location: ../login.php?error=wronglogin");
+        exit();
+    }
+    else if ($existingPswd === $pswd) {
+        session_start();
+        $_SESSION["userN"] = $userExists["username"];
+        header("location: ../home.php");
+        exit();
+    }
 }
 
 ?>

@@ -2,6 +2,7 @@
   require("connect-db.php");
   require("functions.php");
   $books = selectAllBooks();
+  session_start();
 ?>
 
 <!-- 1. create HTML5 doctype -->
@@ -39,9 +40,20 @@
       <li class="nav-item">
         <a class="nav-link" href="lib-event.php">Library Events</a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" href="profile.php">Profile</a>
-      </li>
+      </li> -->
+      <?php
+        if(isset($_SESSION["userN"])) {
+          echo "<li class='nav-item active'><a class='nav-link' href='profile.php'>Profile</a></li>";
+          echo "<li class='nav-item active'><a class='nav-link' href='logout.php'>Log out</a></li>";
+        }
+        else {
+          echo "<li class='nav-item active'><a class='nav-link' href='login.php'>Log In</a></li>";
+          echo "<li class='nav-item active'><a class='nav-link' href='signup.php'>Sign Up</a></li>";
+        }
+      ?>
+      
     </ul>
   </div>
 </nav>

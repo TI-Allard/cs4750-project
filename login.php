@@ -51,7 +51,7 @@ session_start();
 <body>
   <!-- nav bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Our Library</a>
+  <a class="navbar-brand" href="index.php">Our Library</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -98,27 +98,6 @@ session_start();
     ?>
   <?php if($authenticated == "1"): ?>
     <?php setUNAME($_POST['username']) ?>
-    <div class="row justify-content-center">  
-      <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-        <thead>
-          <tr style="background-color:#B0B0B0">
-            <th>Check out our featured books</th>
-            <th>View</th>
-          </tr>
-        </thead>
-        <?php foreach ($featuredbooks as $item): ?>
-          <tr>
-            <td><?php echo $item['title']; ?></td>
-            <td>
-              <form action="bookinfo.php" method="post">
-                <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-                <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
-              </form>
-            </td>            
-          </tr>
-        <?php endforeach; ?>
-      </table>
-    </div>
   <?php else: ?>
     <form name="mainForm" action="login.php" method="post">   
     <div class="row mb-3 mx-3">

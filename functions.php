@@ -207,6 +207,18 @@ function getBooksRead($username){
     return $results;
 }
 
+function createreview($isbn, $username, $title, $body){
+    global $db;
+    $query = "insert into Book values (:isbn, NULL, :username, :title, :body)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->bindValue(':title', $title);
+    $statement->bindValue(':body', $body);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

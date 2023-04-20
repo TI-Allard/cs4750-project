@@ -57,17 +57,18 @@
 <br>
 <?php
         if(isset($_SESSION["userN"])) {
-          echo "<p>Hello " . $_SESSION["userN"] . ". Nice to meet you.</p>";
+          echo "<p>     Hello " . $_SESSION["userN"] . ". Nice to meet you.</p>";
         }
       ?>
 
 <!-- book table -->
+<h4>Books Read</h4>
 <div class="row justify-content-center">  
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">
     <th>Title</th>
-    <th>Books Read</th>
+    <th>View</th>
   </tr>
   </thead>
 <?php foreach ($booksread as $item): ?>

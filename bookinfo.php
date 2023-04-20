@@ -1,9 +1,25 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $thisbook = getBookByISBN($_POST['book_to_view']);
-  $reviews = getReviewsForBook($_POST['book_to_view']); 
+  if(isset($_POST['book_to_view'])){
+    $thisbook = getBookByISBN($_POST['book_to_view']);
+    $reviews = getReviewsForBook($_POST['book_to_view']); 
+  }else { //removed if(isset($_POST['isbn']))
+    $thisbook = getBookByISBN($_POST['isbn']);
+    $reviews = getReviewsForBook($_POST['isbn']); 
+    var_dump($reviews);
+  }
   session_start();
+
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+     if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
+      if(isset($_SESSION["userN"])) {
+        createreview($_POST['isbn'], $_SESSION["userN"], $_POST['title'], $_POST['body']);
+        $reviews = getReviewsForBook($_POST['isbn']);
+      }
+      
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +98,21 @@
       </table>
     </div>
 
-
+    <!-- create review form -->
+    <form name="mainForm" action="bookinfo.php" method="post">   
+  <div class="row mb-3 mx-3">
+    Title:
+    <input type="text" class="form-control" name="title" required />
+  </div>  
+  <div class="row mb-3 mx-3">
+     Conent:
+    <input type="text" class="form-control" name="body" required/>
+        <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+      </div>
+  <div class="row mb-3 mx-3">
+    <input type="submit" class="btn btn-primary" name="actionBtn" value="Post Review" title="Post Review" />        
+  </div>
+  </form>    
 
   </body>
 </html>

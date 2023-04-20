@@ -209,7 +209,7 @@ function getBooksRead($username){
 
 function createreview($isbn, $username, $title, $body){
     global $db;
-    $query = "insert into Book values (:isbn, NULL, :username, :title, :body)";
+    $query = "insert into Review values (:isbn, NULL, :username, :title, :body)";
     $statement = $db->prepare($query);
     $statement->bindValue(':isbn', $isbn);
     $statement->bindValue(':username', $username);

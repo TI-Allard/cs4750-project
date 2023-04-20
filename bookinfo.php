@@ -7,7 +7,6 @@
   }else { //removed if(isset($_POST['isbn']))
     $thisbook = getBookByISBN($_POST['isbn']);
     $reviews = getReviewsForBook($_POST['isbn']); 
-    var_dump($reviews);
   }
   session_start();
 

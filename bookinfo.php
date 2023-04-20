@@ -1,6 +1,8 @@
 <?php
   require("connect-db.php");
   require("functions.php");
+  $review_to_edit = null;
+
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
     $reviews = getReviewsForBook($_POST['book_to_view']); 
@@ -89,7 +91,22 @@
         </thead>
         <?php foreach ($reviews as $item): ?>
           <tr>
-            <td><?php echo $item['username']; ?></td>
+            <td>
+              <?php if($item['username'] == $_SESSION["userN"]): ?>
+                <form action="bookinfo.php" method="post">
+                  <input type="submit" class="btn btn-secondary" name="actionBtn" value="Edit"/>
+                  <input type="hidden" name="review_to_edit" value="<?php echo $item['review_id']; ?>"/>
+                  <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+                </form>
+                <form action="bookinfo.php" method="post">
+                  <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>
+                  <input type="hidden" name="review_to_delete" value="<?php echo $item['review_id']; ?>"/>
+                  <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+                </form>
+              <?php else: ?>
+                <?php echo $item['username']; ?>
+              <?php endif; ?>
+            </td>
             <td><?php echo $item['title']; ?></td>  
             <td><?php echo $item['body']; ?></td>           
           </tr>

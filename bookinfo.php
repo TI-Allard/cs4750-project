@@ -1,9 +1,26 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $thisbook = getBookByISBN($_POST['book_to_view']);
-  $reviews = getReviewsForBook($_POST['book_to_view']); 
+  $review_to_edit = null;
+
+  if(isset($_POST['book_to_view'])){
+    $thisbook = getBookByISBN($_POST['book_to_view']);
+    $reviews = getReviewsForBook($_POST['book_to_view']); 
+  }else { //removed if(isset($_POST['isbn']))
+    $thisbook = getBookByISBN($_POST['isbn']);
+    $reviews = getReviewsForBook($_POST['isbn']); 
+  }
   session_start();
+
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+     if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
+      if(isset($_SESSION["userN"])) {
+        createreview($_POST['isbn'], $_SESSION["userN"], $_POST['title'], $_POST['body']);
+        $reviews = getReviewsForBook($_POST['isbn']);
+      }
+      
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +91,22 @@
         </thead>
         <?php foreach ($reviews as $item): ?>
           <tr>
-            <td><?php echo $item['username']; ?></td>
+            <td>
+              <?php if($item['username'] == $_SESSION["userN"]): ?>
+                <form action="bookinfo.php" method="post">
+                  <input type="submit" class="btn btn-secondary" name="actionBtn" value="Edit"/>
+                  <input type="hidden" name="review_to_edit" value="<?php echo $item['review_id']; ?>"/>
+                  <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+                </form>
+                <form action="bookinfo.php" method="post">
+                  <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>
+                  <input type="hidden" name="review_to_delete" value="<?php echo $item['review_id']; ?>"/>
+                  <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+                </form>
+              <?php else: ?>
+                <?php echo $item['username']; ?>
+              <?php endif; ?>
+            </td>
             <td><?php echo $item['title']; ?></td>  
             <td><?php echo $item['body']; ?></td>           
           </tr>
@@ -82,7 +114,21 @@
       </table>
     </div>
 
-
+    <!-- create review form -->
+    <form name="mainForm" action="bookinfo.php" method="post">   
+  <div class="row mb-3 mx-3">
+    Title:
+    <input type="text" class="form-control" name="title" required />
+  </div>  
+  <div class="row mb-3 mx-3">
+     Conent:
+    <input type="text" class="form-control" name="body" required/>
+        <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+      </div>
+  <div class="row mb-3 mx-3">
+    <input type="submit" class="btn btn-primary" name="actionBtn" value="Post Review" title="Post Review" />        
+  </div>
+  </form>    
 
   </body>
 </html>

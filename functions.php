@@ -196,6 +196,28 @@ function getBookByISBN($isbn){
 	$statement->closeCursor();
 	return $result;
 }
+function getBooksRead($username){   
+    global $db;
+    $query = "select * from HasRead NATURAL JOIN Book where username=:username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $results = $statement->fetchAll(); //fetch()
+    $statement->closeCursor();
+    return $results;
+}
+
+function createreview($isbn, $username, $title, $body){
+    global $db;
+    $query = "insert into Review values (:isbn, NULL, :username, :title, :body)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->bindValue(':title', $title);
+    $statement->bindValue(':body', $body);
+    $statement->execute();
+    $statement->closeCursor();
+}
 
 
 // CODE FROM CLASS

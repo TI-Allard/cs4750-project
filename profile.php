@@ -2,6 +2,13 @@
   require("connect-db.php");
   require("functions.php");
   session_start();
+
+  if(isset($_SESSION["userN"])) {
+    //var_dump($_SESSION["userN"]);
+    $booksread = getBooksRead($_SESSION["userN"]);
+    //var_dump($booksread);
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -50,9 +57,34 @@
 <br>
 <?php
         if(isset($_SESSION["userN"])) {
-          echo "<p>Hello " . $_SESSION["userN"] . ". Nice to meet you.</p>";
+          echo "<p>     Hello " . $_SESSION["userN"] . ". Nice to meet you.</p>";
         }
       ?>
+
+<!-- book table -->
+<h4>Books Read</h4>
+<div class="row justify-content-center">  
+<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+  <thead>
+  <tr style="background-color:#B0B0B0">
+    <th>Title</th>
+    <th>View</th>
+  </tr>
+  </thead>
+<?php foreach ($booksread as $item): ?>
+  <tr>
+     <td><?php echo $item['title']; ?></td>
+     <td>
+       <form action="bookinfo.php" method="post">
+         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+         <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
+       </form>
+     </td>            
+  </tr>
+<?php endforeach; ?>
+</table>
+</div>  
+<!-- end of book table -->
 
   </body>
 </html>

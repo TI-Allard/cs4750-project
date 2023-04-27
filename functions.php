@@ -219,6 +219,38 @@ function createreview($isbn, $username, $title, $body){
     $statement->closeCursor();
 }
 
+function getRole($username){   
+    global $db;
+    $query = "select admin from Profile where username=:username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $results = $statement->fetch(); //fetchAll()
+    $statement->closeCursor();
+    return $results;
+}
+
+
+function selectAllUsers(){
+    global $db;
+    $query = "select * from Profile";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll(); // fetch()
+    $statement->closeCursor();
+    return $results;
+}
+
+function getFriends($username){   
+    global $db;
+    $query = "select * from FriendOf where username1=:username or username2=:username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $results = $statement->fetchAll(); //fetch()
+    $statement->closeCursor();
+    return $results;
+}
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

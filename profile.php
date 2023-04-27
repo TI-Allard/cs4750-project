@@ -3,10 +3,16 @@
   require("functions.php");
   session_start();
 
-  if(isset($_SESSION["userN"])) {
-    //var_dump($_SESSION["userN"]);
+  if(isset($_POST['user_to_view'])){
+    $booksread = getBooksRead($_POST['user_to_view']);
+    $admin = getRole($_POST['user_to_view']); 
+    $current_user = $_POST['user_to_view'];
+    $friends = getFriends($_SESSION["userN"]);
+  }elseif(isset($_SESSION["userN"])){ 
     $booksread = getBooksRead($_SESSION["userN"]);
-    //var_dump($booksread);
+    $admin = getRole($_SESSION["userN"]);
+    $current_user = $_SESSION["userN"];
+    $friends = getFriends($_SESSION["userN"]);
   }
 
 ?>
@@ -23,41 +29,16 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   </head>
   <body>
-    <!-- nav bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="index.php">Our Library</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="home.php">Browse Books</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="lib-event.php">Library Events</a>
-      </li>
-      <!-- <li class="nav-item">
-        <a class="nav-link" href="profile.php">Profile</a>
-      </li> -->
-      <?php
-        if(isset($_SESSION["userN"])) {
-          echo "<li class='nav-item active'><a class='nav-link' href='profile.php'>Profile</a></li>";
-          echo "<li class='nav-item active'><a class='nav-link' href='logout.php'>Log out</a></li>";
-        }
-        else {
-          echo "<li class='nav-item active'><a class='nav-link' href='login.php'>Log In</a></li>";
-          echo "<li class='nav-item active'><a class='nav-link' href='signup.php'>Sign Up</a></li>";
-        }
-      ?>
-      
-    </ul>
-  </div>
-</nav>
+    <!-- don't put anything in this space -- leave the require("navbar.php") as the only thing in php code
+      if you want to change the navbar, you can do so in header.php -->
+    <?php require("navbar.php") ?>
 <br>
 <?php
-        if(isset($_SESSION["userN"])) {
-          echo "<p>     Hello " . $_SESSION["userN"] . ". Nice to meet you.</p>";
+        if((isset($_POST['user_to_view'])) OR (isset($_SESSION["userN"]))) {
+          echo "<h2>     Profile of " . $current_user . ".</h2>";
+          if($admin[0] == TRUE) {
+            echo "<p>     Role: Admin</p>";
+          }
         }
       ?>
 
@@ -85,6 +66,54 @@
 </table>
 </div>  
 <!-- end of book table -->
+
+<!-- friend table -->
+<?php 
+$is_friend = FALSE;
+if($current_user == $_SESSION["userN"]){
+  $is_friend = TRUE;
+}else{
+  foreach ($friends as $item){
+    if($item['username1'] == $_SESSION["userN"] OR $item['username2'] == $_SESSION["userN"]){
+      $is_friend = TRUE;
+    }
+      
+  }
+}
+?>
+
+<?php if($is_friend == TRUE): ?>
+<h4>Friends</h4>
+<div class="row justify-content-center">  
+<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+  <thead>
+  <tr style="background-color:#B0B0B0">
+    <th>User</th>
+    <th>Profile Information</th>
+  </tr>
+  </thead>
+<?php foreach ($friends as $item): ?>
+  <tr>
+     <td><?php if($current_user != $item['username1']){
+      $friend = $item['username1']; 
+     }
+     else{
+      $friend = $item['username2']; 
+     }
+     echo $friend;
+     ?></td>
+     <td>
+       <form action="profile.php" method="post">
+         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+         <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
+       </form>
+     </td>            
+  </tr>
+<?php endforeach; ?>
+<?php endif; ?>
+</table>
+</div>  
+<!-- end of friend table -->
 
   </body>
 </html>

@@ -7,13 +7,14 @@
     $booksread = getBooksRead($_POST['user_to_view']);
     $admin = getRole($_POST['user_to_view']); 
     $current_user = $_POST['user_to_view'];
-    $friends = getFriends($_SESSION["userN"]);
+    $friends = getFriends($_POST['user_to_view']);
   }elseif(isset($_SESSION["userN"])){ 
     $booksread = getBooksRead($_SESSION["userN"]);
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
     $friends = getFriends($_SESSION["userN"]);
   }
+
 
 ?>
 
@@ -77,39 +78,38 @@ if($current_user == $_SESSION["userN"]){
     if($item['username1'] == $_SESSION["userN"] OR $item['username2'] == $_SESSION["userN"]){
       $is_friend = TRUE;
     }
-      
   }
 }
 ?>
 
 <?php if($is_friend == TRUE): ?>
-<h4>Friends</h4>
-<div class="row justify-content-center">  
-<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-  <thead>
-  <tr style="background-color:#B0B0B0">
-    <th>User</th>
-    <th>Profile Information</th>
-  </tr>
-  </thead>
-<?php foreach ($friends as $item): ?>
-  <tr>
-     <td><?php if($current_user != $item['username1']){
-      $friend = $item['username1']; 
-     }
-     else{
-      $friend = $item['username2']; 
-     }
-     echo $friend;
-     ?></td>
-     <td>
-       <form action="profile.php" method="post">
-         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-         <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
-       </form>
-     </td>            
-  </tr>
-<?php endforeach; ?>
+  <h4>Friends</h4>
+  <div class="row justify-content-center">  
+  <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+    <thead>
+    <tr style="background-color:#B0B0B0">
+      <th>User</th>
+      <th>Profile Information</th>
+    </tr>
+    </thead>
+  <?php foreach ($friends as $item): ?>
+    <tr>
+      <td><?php if($current_user != $item['username1']){
+        $friend = $item['username1']; 
+      }
+      elseif($current_user == $item['username1']){
+        $friend = $item['username2']; 
+      }
+      echo $friend;
+      ?></td>
+      <td>
+        <form action="profile.php" method="post">
+          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+          <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
+        </form>
+      </td>            
+    </tr>
+  <?php endforeach; ?>
 <?php endif; ?>
 </table>
 </div>  

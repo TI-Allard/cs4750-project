@@ -1,7 +1,7 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $review_to_edit = null;
+  $review_info_to_edit = null;
 
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
@@ -12,15 +12,29 @@
   }
   session_start();
 
+  
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
-     if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
+    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Update")){
+      //$review_info_to_edit = getFriendByName($_POST['friend_to_update']);
+      //var_dump($friend_info_to_update);
+
+    //create review
+    }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
       if(isset($_SESSION["userN"])) {
         createreview($_POST['isbn'], $_SESSION["userN"], $_POST['title'], $_POST['body']);
         $reviews = getReviewsForBook($_POST['isbn']);
       }
-      
-    }
+    
+    //delete review - not working 
+    }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
+      deleteReview($_POST['review_to_delete']);
+      $reviews = getReviewsForBook($_POST['isbn']);
+  
   }
+  }
+  //update review
+	
+  //updateReview($review_id, $title, $body)
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +107,7 @@
     <input type="text" class="form-control" name="title" required />
   </div>  
   <div class="row mb-3 mx-3">
-     Conent:
+     Content:
     <input type="text" class="form-control" name="body" required/>
         <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
       </div>

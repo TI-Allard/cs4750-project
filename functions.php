@@ -285,6 +285,18 @@ function getReviewByID($review_id){
 	return $result;
 }
 
+function getAverageRating($isbn){
+    global $db;
+	$query = "SELECT AVG(overall_stars) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

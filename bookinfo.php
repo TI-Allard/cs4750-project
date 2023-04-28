@@ -6,9 +6,11 @@
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
     $reviews = getReviewsForBook($_POST['book_to_view']); 
+    $aor = getAverageRating($_POST['book_to_view']);
   }else { 
     $thisbook = getBookByISBN($_POST['isbn']);
     $reviews = getReviewsForBook($_POST['isbn']); 
+    $aor = getAverageRating($_POST['isbn']);
   }
   session_start();
 
@@ -69,6 +71,8 @@
       ISBN: <?php echo $thisbook['isbn']?>
       <br>
       Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>
+      <br>
+      Average Overall Rating: <?php echo $aor[0][0]?>
       <br>
     </p>
     <div class="row justify-content-center">  

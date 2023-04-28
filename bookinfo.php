@@ -6,7 +6,7 @@
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
     $reviews = getReviewsForBook($_POST['book_to_view']); 
-  }else { //removed if(isset($_POST['isbn']))
+  }else { 
     $thisbook = getBookByISBN($_POST['isbn']);
     $reviews = getReviewsForBook($_POST['isbn']); 
   }
@@ -14,9 +14,9 @@
 
   
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Update")){
-      //$review_info_to_edit = getFriendByName($_POST['friend_to_update']);
-      //var_dump($friend_info_to_update);
+    //get update info
+    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Edit")){
+      $review_info_to_edit = getReviewByID($_POST['review_to_edit']);
 
     //create review
     }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
@@ -25,16 +25,21 @@
         $reviews = getReviewsForBook($_POST['isbn']);
       }
     
-    //delete review - not working 
+    //delete review 
     }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
       deleteReview($_POST['review_to_delete']);
       $reviews = getReviewsForBook($_POST['isbn']);
   
+    }
+
+    //confirm update
+    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Confirm Edit")){
+      updateReview($_POST['reviewID'], $_POST['title'], $_POST['body']);
+      $reviews = getReviewsForBook($_POST['isbn']);
+    }
+
   }
-  }
-  //update review
-	
-  //updateReview($review_id, $title, $body)
+  
 ?>
 
 <!DOCTYPE html>
@@ -104,15 +109,20 @@
     <form name="mainForm" action="bookinfo.php" method="post">   
   <div class="row mb-3 mx-3">
     Title:
-    <input type="text" class="form-control" name="title" required />
+    <input type="text" class="form-control" name="title" required 
+    value="<?php if ($review_info_to_edit!=null) echo $review_info_to_edit['title'];?>"/>
   </div>  
   <div class="row mb-3 mx-3">
      Content:
-    <input type="text" class="form-control" name="body" required/>
+    <input type="text" class="form-control" name="body" required
+    value="<?php if ($review_info_to_edit!=null) echo $review_info_to_edit['body'];?>"/>
         <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
       </div>
   <div class="row mb-3 mx-3">
-    <input type="submit" class="btn btn-primary" name="actionBtn" value="Post Review" title="Post Review" />        
+    <input type="submit" class="btn btn-primary" name="actionBtn" value="Post Review" title="Post Review" />
+    <br>
+    <input type="hidden" name="reviewID" value="<?php echo $_POST['review_to_edit']; ?>"/> 
+    <input type="submit" class="btn btn-primary" name="actionBtn" value="Confirm Edit" title="Confirm Edit" />        
   </div>
   </form>    
 

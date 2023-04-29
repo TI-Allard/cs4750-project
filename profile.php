@@ -15,19 +15,22 @@
     $admin = getRole($_POST['user_to_view']); 
     $current_user = $_POST['user_to_view'];
     $friends = getFriends($_POST['user_to_view']);
+    $reserves = getReservedBooks($_SESSION["user_to_view"]);
   }elseif(isset($_POST['user_to_make_admin'])){
     setAdmin($_POST['user_to_make_admin']);
     $booksread = getBooksRead($_POST['user_to_make_admin']);
     $admin = getRole($_POST['user_to_make_admin']); 
     $current_user = $_POST['user_to_make_admin'];
     $friends = getFriends($_POST['user_to_make_admin']);
+    $reserves = getReservedBooks($_SESSION["userN"]);
   }elseif(isset($_SESSION["userN"])){ 
     $booksread = getBooksRead($_SESSION["userN"]);
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
     $friends = getFriends($_SESSION["userN"]); 
-    $reserves = getReservedBooks($_POST['user_checking_out']);
+    $reserves = getReservedBooks($_SESSION["userN"]);
   }
+  var_dump($reserves); 
   if(isset($_SESSION["userN"])){
     $admin_logged_in = getRole($_SESSION["userN"]);
   }

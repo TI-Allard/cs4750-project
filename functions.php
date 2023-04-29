@@ -123,7 +123,7 @@ function getReading($event_id){
 
 function getReservedBooks($username){
     global $db;
-    $query = "SELECT * FROM Reserves NATURAL JOIN BOOK WHERE username=:username";
+    $query = "SELECT * FROM Reserves NATURAL JOIN Book WHERE username=:username";
 	$statement = $db->prepare($query);
 	$statement->bindValue(':username', $username);
 	$statement->execute();

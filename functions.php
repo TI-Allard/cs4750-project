@@ -51,6 +51,7 @@ function setUNAME($username){
     $uname = $username;
 }
 
+// -----Code for Library Events -----
 function selectAllLibEvents(){
     // db
     global $db;
@@ -116,6 +117,57 @@ function getReading($event_id){
     $statement->closeCursor();
 
     return $results;
+}
+
+// ----- Code for Displaying Books that have been Reserved ----- 
+
+function getReservedBooks($username){
+    global $db;
+    $query = "SELECT * FROM Reserves NATURAL JOIN Book WHERE username=:username";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':username', $username);
+	$statement->execute();
+	$results = $statement->fetchAll();
+	$statement->closeCursor();
+	return $results;
+}
+
+// ----- Code for Checking out and Returning Books ----- 
+
+function getAvailability($isbn){ //idk if i need this 
+    global $db;
+    
+    $query = "SELECT copies_available FROM Book WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$results = $statement->fetch();
+	$statement->closeCursor();
+	return $results;
+}
+
+function reserveBook($isbn, $username){ //insert statements do not fetch anything! 
+    global $db;
+    
+    $query = "INSERT INTO Reserves VALUES (:isbn, :username)";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+	$statement->execute();
+	$statement->closeCursor();
+}
+
+function checkoutBook($isbn, $copies_checked_out){
+    global $db;
+    
+    $query = "UPDATE Book SET copies_checked_out =:copies_checked_out WHERE isbn = :isbn";
+	$statement = $db->prepare($query);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	// $results = $statement->fetchAll();
+	$statement->closeCursor();
+	// return $results;
 }
 
 function getReviewsForBook($isbn){

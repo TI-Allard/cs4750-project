@@ -134,7 +134,7 @@ function getReservedBooks($username){
 
 // ----- Code for Checking out and Returning Books ----- 
 
-function getAvailability($isbn){
+function getAvailability($isbn){ //idk if i need this 
     global $db;
     
     $query = "SELECT copies_available FROM Book WHERE isbn=:isbn";

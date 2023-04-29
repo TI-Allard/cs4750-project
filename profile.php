@@ -16,6 +16,22 @@
     $reserves = getReservedBooks($_POST['userN']); 
   }
 
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Check Out")){
+     if(isset($_SESSION["userN"])) {
+       $booktocheckout = getBookByISBN($_POST['isbn']);
+       $availability = $booktocheckout['total_copies'] - $booktocheckout['copies_checked_out'];
+       if ($booktocheckout['copies_checked_out'] < $booktocheckout['total_copies']){
+          checkoutBook($_POST['isbn']); 
+       }
+      else{
+          echo "That book is not available! Sorry!"; 
+      }
+       
+     }
+   }
+ }
+
 
 
 ?>

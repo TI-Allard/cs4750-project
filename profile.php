@@ -3,6 +3,8 @@
   require("functions.php");
   session_start();
 
+  $booksreadflag = False; 
+
   if(isset($_POST['us_1']) AND isset($_POST['us_2'])){
     addFriend($_POST['us_1'], $_POST['us_2']);
     echo "added";
@@ -30,7 +32,7 @@
     $current_user = $_POST['user_to_make_admin'];
     $friends = getFriends($_POST['user_to_make_admin']);
   }elseif(isset($_SESSION["userN"])){ 
-    // $booksread = getBooksRead($_SESSION["userN"]);  
+    $booksread = getBooksRead($_SESSION["userN"]);  
     $booksreadflag = True; 
     //because you can return a book and it populates hasRead
     $admin = getRole($_SESSION["userN"]);
@@ -188,9 +190,7 @@ foreach ($friends as $item){
     <th>View</th>
   </tr>
   </thead>
-<?php if ($booksreadflag = True):?>
-  <?php $booksread = getBooksRead($_SESSION["userN"]); ?>
-<?php endif; ?>
+
 <?php foreach ($booksread as $item): ?>
   <tr>
      <td><?php echo $item['title']; ?></td>

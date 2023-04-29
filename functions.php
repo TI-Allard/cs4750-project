@@ -252,6 +252,52 @@ function getFriends($username){
     return $results;
 }
 
+
+function deleteReview($review_id){
+    global $db;
+    //echo $review_id;
+    $query = "delete from Review where review_id=:review_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':review_id', $review_id);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+function updateReview($review_id, $title, $body){
+    global $db;
+    $query = "update Review set title=:title, body=:body where review_id=:review_id";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':title', $title);
+    $statement->bindValue(':body', $body);
+    $statement->bindValue(':review_id', $review_id);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+function getReviewByID($review_id){
+    global $db;
+	$query = "select * from Review where review_id=:review_id";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':review_id', $review_id);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
+
+function getAverageRating($isbn){
+    global $db;
+	$query = "SELECT AVG(overall_stars) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)
 // {

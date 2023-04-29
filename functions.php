@@ -124,6 +124,19 @@ function getReading($event_id){
     return $results;
 }
 
+// ----- Code for Adding to HasRead ----- 
+
+function addHasRead($isbn, $username){
+    global $db;
+    $query = "insert into HasRead values (:isbn, :username)";
+    //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 // ----- Code for Displaying Books that have been Reserved ----- 
 
 function getReservedBooks($username){
@@ -153,30 +166,27 @@ function getAvailability($isbn){ //idk if i need this
 
 function reserveBook($isbn, $username){
     global $db;
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $query = "insert into Reserves values (:isbn, :username)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
-    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT
     $statement->bindValue(':username', $username);
     $statement->execute();
     $statement->closeCursor();
 }
 
-// function reserveBook($isbn, $username){ //insert statements do not fetch anything! 
-//     global $db;
-    
-//     $query = "insert into Reserves values (:isbn, :username)";
-
-//     try {
-//         $statement = $db->prepare($query);
-// 	    $statement->bindValue(':isbn', $isbn);
-//         $statement->bindValue(':username', $username);
-// 	    $statement->execute();
-//     } catch (PDOException $e){
-//         echo "An issue occured adding that reservation!"; 
-//     }
-// 	$statement->closeCursor();
-// }
+function deleteReservation($isbn, $username){
+    global $db;
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $query = "delete from Reserves where (isbn=:isbn AND username=:username)";
+    //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $statement->closeCursor();
+}
 
 function checkoutBook($isbn, $copies_checked_out){
     global $db;
@@ -188,16 +198,18 @@ function checkoutBook($isbn, $copies_checked_out){
 	$statement->execute();
 	// $results = $statement->fetchAll(); 
 	$statement->closeCursor();
+}
 
-    // $query2 = "insert into Reserves values (:isbn, :username)"; 
-    // $statement2 = $db->prepare($query2);
-    // $statement2->bindValue(':isbn', $isbn);
-	// $statement2->bindValue(':username', $username);
-	// $statement2->execute();
-	// $statement2->closeCursor();
-
+function returnBook($isbn, $copies_checked_out){
+    global $db;
     
-	// return $results;
+    $query = "UPDATE Book SET copies_checked_out=:copies_checked_out WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	// $results = $statement->fetchAll(); 
+	$statement->closeCursor();
 }
 
 function getReviewsForBook($isbn){

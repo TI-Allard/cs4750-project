@@ -17,6 +17,7 @@
   }
   if(isset($_POST['user_to_view'])){
     $booksread = getBooksRead($_POST['user_to_view']);
+    $booksreadflag = False; 
     $admin = getRole($_POST['user_to_view']); 
     $current_user = $_POST['user_to_view'];
     $friends = getFriends($_POST['user_to_view']);
@@ -24,11 +25,14 @@
   }elseif(isset($_POST['user_to_make_admin'])){
     setAdmin($_POST['user_to_make_admin']);
     $booksread = getBooksRead($_POST['user_to_make_admin']);
+    $booksreadflag = False; 
     $admin = getRole($_POST['user_to_make_admin']); 
     $current_user = $_POST['user_to_make_admin'];
     $friends = getFriends($_POST['user_to_make_admin']);
   }elseif(isset($_SESSION["userN"])){ 
-    $booksread = getBooksRead($_SESSION["userN"]);
+    // $booksread = getBooksRead($_SESSION["userN"]);  
+    $booksreadflag = True; 
+    //because you can return a book and it populates hasRead
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
     $friends = getFriends($_SESSION["userN"]); 
@@ -78,15 +82,9 @@
    }
    if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Have Read")){
     if(isset($_SESSION["userN"])){
-
-      echo "do you get inside the if statement for hasread? "; 
-      //$_POST['book_to_have_read']
-      //$_POST['user_of_have_read']
       addHasRead($_POST['book_to_have_read'], $_POST['user_of_have_read']); 
-      
-      echo "do you register as has read? "; 
     }
-   }//have read if statement 
+   }
    if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Return")){
     if(isset($_SESSION["userN"])){
       $book_to_return = getBookByISBN($_POST['returned_book']); 
@@ -95,7 +93,7 @@
       returnBook($book_to_return['isbn'], $copies_to_return); 
       deleteReservation($book_to_return['isbn'], $current_user); 
     }
-   }//have read if statement 
+   }
  }
 
 
@@ -190,6 +188,9 @@ foreach ($friends as $item){
     <th>View</th>
   </tr>
   </thead>
+<?php if ($booksreadflag = True):?>
+  <?php $booksread = getBooksRead($_SESSION["userN"]); ?>
+<?php endif; ?>
 <?php foreach ($booksread as $item): ?>
   <tr>
      <td><?php echo $item['title']; ?></td>
@@ -345,3 +346,4 @@ foreach ($friends as $item){
 
   </body>
 </html>
+

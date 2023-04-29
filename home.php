@@ -3,6 +3,12 @@
   require("functions.php");
   $books = selectAllBooks();
   session_start();
+  if(isset($_POST['isbn'])){
+    deleteBook($_POST['isbn']);
+  }
+  if(isset($_SESSION["userN"])){
+    $admin_logged_in = getRole($_SESSION["userN"]);
+  }
 ?>
 
 <!-- 1. create HTML5 doctype -->
@@ -37,6 +43,9 @@
   <tr style="background-color:#B0B0B0">
     <th>Title</th>
     <th>Book Information</th>
+    <?php if($admin_logged_in == TRUE): ?>
+      <th>Remove Book?</th>
+    <?php endif; ?>
   </tr>
   </thead>
 <?php foreach ($books as $item): ?>
@@ -47,7 +56,15 @@
          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
          <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
        </form>
-     </td>            
+     </td>     
+     <?php if($admin_logged_in == TRUE): ?>
+      <td>
+        <form action="home.php" method="post">
+          <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>
+          <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+        </form>
+      </td>
+    <?php endif; ?>
   </tr>
 <?php endforeach; ?>
 </table>

@@ -41,6 +41,10 @@
     }
 
   }
+  if(isset($_SESSION["userN"])){
+    $admin_logged_in = getRole($_SESSION["userN"]);
+  }
+
   
 ?>
 
@@ -82,6 +86,9 @@
             <th>Author</th>
             <th>Title</th>
             <th>Review Content</th>
+            <?php if($admin_logged_in == TRUE): ?>
+              <th>Inappropriate Review?</th>
+            <?php endif; ?>
           </tr>
         </thead>
         <?php foreach ($reviews as $item): ?>
@@ -103,7 +110,16 @@
               <?php endif; ?>
             </td>
             <td><?php echo $item['title']; ?></td>  
-            <td><?php echo $item['body']; ?></td>           
+            <td><?php echo $item['body']; ?></td>  
+            <?php if($admin_logged_in == TRUE): ?>
+              <td>
+                <form action="bookinfo.php" method="post">
+                  <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>
+                  <input type="hidden" name="review_to_delete" value="<?php echo $item['review_id']; ?>"/>
+                  <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+                </form>
+              </td>
+            <?php endif; ?>         
           </tr>
         <?php endforeach; ?>
       </table>

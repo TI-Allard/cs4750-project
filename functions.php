@@ -51,6 +51,7 @@ function setUNAME($username){
     $uname = $username;
 }
 
+// -----Code for Library Events -----
 function selectAllLibEvents(){
     // db
     global $db;
@@ -116,6 +117,19 @@ function getReading($event_id){
     $statement->closeCursor();
 
     return $results;
+}
+
+// ----- Code for Displaying Books that have been Reserved ----- 
+
+function getReservedBooks($username){
+    global $db;
+    $query = "SELECT * FROM Reserves NATURAL JOIN BOOK WHERE username=:username";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':username', $username);
+	$statement->execute();
+	$results = $statement->fetchAll();
+	$statement->closeCursor();
+	return $results;
 }
 
 function getReviewsForBook($isbn){

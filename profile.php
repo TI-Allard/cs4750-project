@@ -3,7 +3,12 @@
   require("functions.php");
   session_start();
 
-  if(isset($_POST['user_to_accept'])){
+  if(isset($_POST['us_1']) AND isset($_POST['us_2'])){
+    addFriend($_POST['us_1'], $_POST['us_2']);
+    echo "added";
+  }elseif(isset($_POST['want_usern_1']) AND isset($_POST['want_usern_2'])){ //figure out order for request accept
+    setRequestAccept($_POST['want_usern_2'], $_SESSION['want_usern_1']);
+  }elseif(isset($_POST['user_to_accept'])){
     setRequestAccept($_POST['user_to_accept'], $_SESSION['userN']);
   }elseif(isset($_POST['user_to_reject'])){
     setRequestReject($_POST['user_to_reject'], $_SESSION['userN']);
@@ -107,6 +112,8 @@
 
 <?php 
 $is_friend = FALSE;
+$friend_in_table = FALSE;
+$want_to_be_friend = FALSE;
 if($current_user == $_SESSION["userN"]){
   $is_friend = TRUE;
 }else{
@@ -116,13 +123,36 @@ if($current_user == $_SESSION["userN"]){
     }
   }
 }
+if($current_user == $_SESSION["userN"]){
+  $friend_in_table = TRUE;
+}elseif($is_friend == TRUE){
+  $friend_in_table = TRUE;
+}else{
+  foreach ($friends as $item){
+    if(($item['username1'] == $_SESSION["userN"] AND $item['username2'] == $current_user)){
+      $friend_in_table = TRUE;
+    }
+  }
+}
+foreach ($friends as $item){
+  if(($item['username2'] == $_SESSION["userN"]) AND ($item['username1'] == $current_user) AND ($item['accept'] == FALSE)){
+    $want_to_be_friend = TRUE;
+  }
+}
+
 ?>
 
-<?php if($is_friend == FALSE): ?>
+<?php if($friend_in_table == FALSE): echo "not want"?>
   <form action="profile.php" method="post">
-    <input type="submit" class="btn btn-secondary" name="actionBtn" value="Send Friend Request"/>
-    <input type="hidden" name="usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
-    <input type="hidden" name="usern_2" value="<?php echo $current_user; ?>"/>
+    <input type="submit" class="btn btn-secondary" name="actionBtn" value="Add Friend Request"/>
+    <input type="hidden" name="us_1" value="<?php echo $_SESSION['userN']; ?>"/>
+    <input type="hidden" name="us_2" value="<?php echo $current_user; ?>"/>
+  </form>
+<?php elseif($want_to_be_friend == TRUE): echo "want"?>
+  <form action="profile.php" method="post">
+    <input type="submit" class="btn btn-secondary" name="actionBtn" value="Add Friend Request"/>
+    <input type="hidden" name="want_usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
+    <input type="hidden" name="want_usern_2" value="<?php echo $current_user; ?>"/>
   </form>
 <?php endif; ?>
 

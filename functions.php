@@ -393,12 +393,13 @@ function getAverageRating($isbn){
 
 function addFriend($un_1, $un_2){
     global $db;
+    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
     $statement = $db->prepare($query);
     $statement->bindValue(':username1', $un_1);
     $statement->bindValue(':username2', $un_2);
-    $statement->bindValue(':acc', FALSE);
-    $statement->bindValue(':rej', FALSE);
+    $statement->bindValue(':acc', 0);
+    $statement->bindValue(':rej', 0);
     $statement->execute();
     $statement->closeCursor();
 }
@@ -454,6 +455,19 @@ function deleteBook($isbn){
     $statement->execute();
     $statement->closeCursor();
 }
+
+// function addBook($un_1, $un_2){
+//     global $db;
+//     $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+//     $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
+//     $statement = $db->prepare($query);
+//     $statement->bindValue(':username1', $un_1);
+//     $statement->bindValue(':username2', $un_2);
+//     $statement->bindValue(':acc', 0);
+//     $statement->bindValue(':rej', 0);
+//     $statement->execute();
+//     $statement->closeCursor();
+// }
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

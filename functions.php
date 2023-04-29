@@ -124,6 +124,19 @@ function getReading($event_id){
     return $results;
 }
 
+// ----- Code for Adding to HasRead ----- 
+
+function addHasRead($isbn, $username){
+    global $db;
+    $query = "insert into HasRead values (:isbn, :username)";
+    //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 // ----- Code for Displaying Books that have been Reserved ----- 
 
 function getReservedBooks($username){
@@ -153,10 +166,11 @@ function getAvailability($isbn){ //idk if i need this
 
 function reserveBook($isbn, $username){
     global $db;
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $query = "insert into Reserves values (:isbn, :username)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
-    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT
     $statement->bindValue(':username', $username);
     $statement->execute();
     $statement->closeCursor();

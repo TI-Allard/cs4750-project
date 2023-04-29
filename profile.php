@@ -32,7 +32,6 @@
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
     $friends = getFriends($_SESSION["userN"]); 
-    $reserves = getReservedBooks($_SESSION["userN"]);
   }
   if(isset($_SESSION["userN"])){
     $admin_logged_in = getRole($_SESSION["userN"]);
@@ -46,11 +45,9 @@
        $totalcopiestemp = $booktocheckout['total_copies']; 
        $copiescheckedouttemp = $booktocheckout['copies_checked_out']; 
 
-       $reserves = getReservedBooks($_POST['user_checking_out']);
+      //  $reserves = getReservedBooks($_POST['user_checking_out']);
 
         // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
-
-
        echo $_POST["user_checking_out"]; 
        echo "isbn is gonna come next "; 
        echo $_POST['book_to_checkout']; 
@@ -69,7 +66,7 @@
           //yay!!! it works now!!! 
 
 
-          reserveBook($booktocheckout['isbn'], $_POST("user_checking_out")); 
+          reserveBook($booktocheckout['isbn'], $_POST['user_checking_out']); 
           // $reserves = getReservedBooks($_POST['user_checking_out']); 
           echo 'DO I EVEN GET HEREE???'; 
        }
@@ -78,6 +75,17 @@
       }
        
      }
+     if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Have Read")){
+      if(isset($_SESSION["userN"])){
+
+        echo "do you get inside the if statement for hasread? "; 
+        //$_POST['book_to_have_read']
+        //$_POST['user_of_have_read']
+        addHasRead($_POST['book_to_have_read'], $_POST['user_of_have_read']); 
+        
+        echo "do you register as has read? "; 
+      }
+     }//have read if statement 
    }
  }
 
@@ -287,6 +295,7 @@ foreach ($friends as $item){
 
 <!-- start of reserved books table -->
 <?php if ($admin_logged_in[0]==TRUE OR $current_user==$_SESSION["userN"]): ?>
+  <?php $reserves = getReservedBooks($_SESSION["userN"]); ?> 
   <?php if ($admin_logged_in[0]==TRUE) : ?>
     <?php $reserves = getReservedBooks($_POST['user_to_view']); ?>
   <?php endif; ?>

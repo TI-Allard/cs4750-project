@@ -12,18 +12,33 @@
     $booksread = getBooksRead($_SESSION["userN"]);
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
-    $friends = getFriends($_SESSION["userN"]);
-    $reserves = getReservedBooks($_POST['userN']); 
+    $friends = getFriends($_SESSION["userN"]); 
+    $reserves = getReservedBooks($_POST['user_checking_out']);
   }
 
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Check Out")){
      if(isset($_SESSION["userN"])) {
-       $booktocheckout = getBookByISBN($_POST['isbn']);
+       $booktocheckout = getBookByISBN($_POST['book_to_checkout']);
        $availability = $booktocheckout['total_copies'] - $booktocheckout['copies_checked_out'];
+       $totalcopiestemp = $booktocheckout['total_copies']; 
+       $copiescheckedouttemp = $booktocheckout['copies_checked_out']; 
+
+      //  $reserves = getReservedBooks($_POST['user_checking_out']);
+
+        // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
+
+
+       echo $_POST["user_checking_out"]; 
+       echo "isbn is gonna come next "; 
+       echo $_POST['book_to_checkout']; 
+
+       echo "CopiesCheckedOut is $copiescheckedouttemp";
+       echo "total copies is $totalcopiestemp";
        if ($booktocheckout['copies_checked_out'] < $booktocheckout['total_copies']){
-          checkoutBook($_POST['isbn']); 
-          
+          checkoutBook($_POST['isbn'], $copiescheckedouttemp+1); 
+          // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
+          echo 'DO I EVEN GET HEREE???'; 
        }
       else{
           echo "That book is not available! Sorry!"; 
@@ -149,7 +164,7 @@ if($current_user == $_SESSION["userN"]){
   <tr>
      <td><?php echo $item['title']; ?></td>
      <td><?php echo $item['author']; ?></td>
-     <td>
+     <!-- <td>
        <form action="bookinfo.php" method="post">
          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
          <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
@@ -158,7 +173,7 @@ if($current_user == $_SESSION["userN"]){
          <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
          <input type="hidden" name="returnedBook" value="<?php echo $item['isbn']; ?>"/>
        </form>
-     </td>            
+     </td>             -->
   </tr>
 <?php endforeach; ?>
 </table>

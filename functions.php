@@ -146,16 +146,28 @@ function getAvailability($isbn){ //idk if i need this
 	return $results;
 }
 
-function checkoutBook($isbn){
+function reserveBook($isbn, $username){ //insert statements do not fetch anything! 
     global $db;
     
-    $query = "UPDATE Book SET copies_checked_out = copies_checked_out + 1 WHERE isbn = :isbn";
+    $query = "INSERT INTO Reserves VALUES (:isbn, :username)";
 	$statement = $db->prepare($query);
 	$statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
 	$statement->execute();
-	$results = $statement->fetchAll();
 	$statement->closeCursor();
-	return $results;
+}
+
+function checkoutBook($isbn, $copies_checked_out){
+    global $db;
+    
+    $query = "UPDATE Book SET copies_checked_out =:copies_checked_out WHERE isbn = :isbn";
+	$statement = $db->prepare($query);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	// $results = $statement->fetchAll();
+	$statement->closeCursor();
+	// return $results;
 }
 
 function getReviewsForBook($isbn){

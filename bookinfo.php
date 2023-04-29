@@ -2,6 +2,7 @@
   require("connect-db.php");
   require("functions.php");
   $review_info_to_edit = null;
+  $copies_incremented = null; 
 
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
@@ -13,6 +14,7 @@
     $aor = getAverageRating($_POST['isbn']);
   }
   session_start();
+  $admin_logged_in = [FALSE];
 
   
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -79,6 +81,27 @@
       Average Overall Rating: <?php echo $aor[0][0]?>
       <br>
     </p>
+    <div> 
+      <!-- this is going to be testing if else functionality  -->
+      <?php $copies_available = $thisbook['total_copies'] - $thisbook['copies_checked_out']?> 
+      <?php if( $thisbook['copies_checked_out'] < $thisbook['total_copies'] ): ?>
+          <p> Nothing </p>
+          <?php $copies_incremented = $thisbook['copies_checked_out'] + 1 ?>
+          <?php echo $copies_incremented ?> 
+      <?php else: ?>
+          
+          <p> Random Thing </p>
+      <?php endif; ?>
+    </div>
+    <div>
+        <form name="checkout" action= "profile.php" method="post">
+          <div class="row mb-3 mx-3">
+            <input type="submit" class="btn btn-primary" name="actionBtn" value="Check Out" title="Check Out" />
+            <input type="hidden" name="book_to_checkout" value="<?php echo $thisbook['isbn']; ?>"/>
+            <input type="hidden" name="user_checking_out" value="<?php echo $_SESSION["userN"]; ?>"/>        
+          </div>
+        </form>
+    </div>
     <div class="row justify-content-center">  
       <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
         <thead>
@@ -86,7 +109,7 @@
             <th>Author</th>
             <th>Title</th>
             <th>Review Content</th>
-            <?php if($admin_logged_in == TRUE): ?>
+            <?php if($admin_logged_in[0] == TRUE): ?>
               <th>Inappropriate Review?</th>
             <?php endif; ?>
           </tr>
@@ -111,7 +134,7 @@
             </td>
             <td><?php echo $item['title']; ?></td>  
             <td><?php echo $item['body']; ?></td>  
-            <?php if($admin_logged_in == TRUE): ?>
+            <?php if($admin_logged_in[0] == TRUE): ?>
               <td>
                 <form action="bookinfo.php" method="post">
                   <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>

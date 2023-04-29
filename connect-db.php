@@ -79,6 +79,14 @@ $dsn = "mysql:host=$host;dbname=$dbname";
 
 //random
 
+$options = [
+   \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+   \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+   \PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+error_reporting(E_ALL);
+ini_set('display_errors',1);
 
 /** connect to the database **/
 try 

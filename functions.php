@@ -20,6 +20,11 @@
 
 $uname = null;
 
+// for error reporting 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
 function authenticateUser($username, $pswd)
 {
 	global $db;
@@ -51,6 +56,7 @@ function setUNAME($username){
     $uname = $username;
 }
 
+// -----Code for Library Events -----
 function selectAllLibEvents(){
     // db
     global $db;
@@ -116,6 +122,82 @@ function getReading($event_id){
     $statement->closeCursor();
 
     return $results;
+}
+
+// ----- Code for Displaying Books that have been Reserved ----- 
+
+function getReservedBooks($username){
+    global $db;
+    $query = "SELECT * FROM Reserves NATURAL JOIN Book WHERE username=:username";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':username', $username);
+	$statement->execute();
+	$results = $statement->fetchAll();
+	$statement->closeCursor();
+	return $results;
+}
+
+// ----- Code for Checking out and Returning Books ----- 
+
+function getAvailability($isbn){ //idk if i need this 
+    global $db;
+    
+    $query = "SELECT copies_available FROM Book WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$results = $statement->fetch();
+	$statement->closeCursor();
+	return $results;
+}
+
+function reserveBook($isbn, $username){
+    global $db;
+    $query = "insert into Reserves values (:isbn, :username)";
+    //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+// function reserveBook($isbn, $username){ //insert statements do not fetch anything! 
+//     global $db;
+    
+//     $query = "insert into Reserves values (:isbn, :username)";
+
+//     try {
+//         $statement = $db->prepare($query);
+// 	    $statement->bindValue(':isbn', $isbn);
+//         $statement->bindValue(':username', $username);
+// 	    $statement->execute();
+//     } catch (PDOException $e){
+//         echo "An issue occured adding that reservation!"; 
+//     }
+// 	$statement->closeCursor();
+// }
+
+function checkoutBook($isbn, $copies_checked_out){
+    global $db;
+    
+    $query = "UPDATE Book SET copies_checked_out=:copies_checked_out WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	// $results = $statement->fetchAll(); 
+	$statement->closeCursor();
+
+    // $query2 = "insert into Reserves values (:isbn, :username)"; 
+    // $statement2 = $db->prepare($query2);
+    // $statement2->bindValue(':isbn', $isbn);
+	// $statement2->bindValue(':username', $username);
+	// $statement2->execute();
+	// $statement2->closeCursor();
+
+    
+	// return $results;
 }
 
 function getReviewsForBook($isbn){
@@ -312,6 +394,19 @@ function getAverageRating($isbn){
 
 }
 
+function addFriend($un_1, $un_2){
+    global $db;
+    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+    $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':username1', $un_1);
+    $statement->bindValue(':username2', $un_2);
+    $statement->bindValue(':acc', 0);
+    $statement->bindValue(':rej', 0);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 function setRequestAccept($un_1, $un_2){
     global $db;
     $query = "update FriendOf set accept=:accept where username1=:username1 AND username2=:username2";
@@ -363,6 +458,19 @@ function deleteBook($isbn){
     $statement->execute();
     $statement->closeCursor();
 }
+
+// function addBook($un_1, $un_2){
+//     global $db;
+//     $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+//     $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
+//     $statement = $db->prepare($query);
+//     $statement->bindValue(':username1', $un_1);
+//     $statement->bindValue(':username2', $un_2);
+//     $statement->bindValue(':acc', 0);
+//     $statement->bindValue(':rej', 0);
+//     $statement->execute();
+//     $statement->closeCursor();
+// }
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

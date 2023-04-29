@@ -3,6 +3,7 @@
   require("functions.php");
   $books = selectAllBooks();
   session_start();
+  $admin_logged_in = [FALSE];
   if(isset($_POST['isbn'])){
     deleteBook($_POST['isbn']);
   }
@@ -62,7 +63,7 @@
   <tr style="background-color:#B0B0B0">
     <th>Title</th>
     <th>Book Information</th>
-    <?php if($admin_logged_in == TRUE): ?>
+    <?php if($admin_logged_in[0] == TRUE): ?>
       <th>Remove Book?</th>
     <?php endif; ?>
   </tr>
@@ -76,7 +77,7 @@
          <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
        </form>
      </td>     
-     <?php if($admin_logged_in == TRUE): ?>
+     <?php if($admin_logged_in[0] == TRUE): ?>
       <td>
         <form action="home.php" method="post">
           <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>

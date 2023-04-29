@@ -1,27 +1,48 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $review_to_edit = null;
+  $review_info_to_edit = null;
   $copies_incremented = null; 
 
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
     $reviews = getReviewsForBook($_POST['book_to_view']); 
-  }else { //removed if(isset($_POST['isbn']))
+    $aor = getAverageRating($_POST['book_to_view']);
+  }else { 
     $thisbook = getBookByISBN($_POST['isbn']);
     $reviews = getReviewsForBook($_POST['isbn']); 
+    $aor = getAverageRating($_POST['isbn']);
   }
   session_start();
 
+  
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
-     if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
+    //get update info
+    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Edit")){
+      $review_info_to_edit = getReviewByID($_POST['review_to_edit']);
+
+    //create review
+    }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Post Review")){
       if(isset($_SESSION["userN"])) {
         createreview($_POST['isbn'], $_SESSION["userN"], $_POST['title'], $_POST['body']);
         $reviews = getReviewsForBook($_POST['isbn']);
       }
-      
+    
+    //delete review 
+    }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
+      deleteReview($_POST['review_to_delete']);
+      $reviews = getReviewsForBook($_POST['isbn']);
+  
     }
+
+    //confirm update
+    if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Confirm Edit")){
+      updateReview($_POST['reviewID'], $_POST['title'], $_POST['body']);
+      $reviews = getReviewsForBook($_POST['isbn']);
+    }
+
   }
+  
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +72,8 @@
       ISBN: <?php echo $thisbook['isbn']?>
       <br>
       Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>
+      <br>
+      Average Overall Rating: <?php echo $aor[0][0]?>
       <br>
     </p>
     <div> 
@@ -112,15 +135,20 @@
     <form name="mainForm" action="bookinfo.php" method="post">   
   <div class="row mb-3 mx-3">
     Title:
-    <input type="text" class="form-control" name="title" required />
+    <input type="text" class="form-control" name="title" required 
+    value="<?php if ($review_info_to_edit!=null) echo $review_info_to_edit['title'];?>"/>
   </div>  
   <div class="row mb-3 mx-3">
-     Conent:
-    <input type="text" class="form-control" name="body" required/>
+     Content:
+    <input type="text" class="form-control" name="body" required
+    value="<?php if ($review_info_to_edit!=null) echo $review_info_to_edit['body'];?>"/>
         <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
       </div>
   <div class="row mb-3 mx-3">
-    <input type="submit" class="btn btn-primary" name="actionBtn" value="Post Review" title="Post Review" />        
+    <input type="submit" class="btn btn-primary" name="actionBtn" value="Post Review" title="Post Review" />
+    <br>
+    <input type="hidden" name="reviewID" value="<?php echo $_POST['review_to_edit']; ?>"/> 
+    <input type="submit" class="btn btn-primary" name="actionBtn" value="Confirm Edit" title="Confirm Edit" />        
   </div>
   </form>    
 

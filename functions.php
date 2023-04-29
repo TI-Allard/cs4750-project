@@ -132,6 +132,32 @@ function getReservedBooks($username){
 	return $results;
 }
 
+// ----- Code for Checking out and Returning Books ----- 
+
+function getAvailability($isbn){
+    global $db;
+    
+    $query = "SELECT copies_available FROM Book WHERE isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$results = $statement->fetch();
+	$statement->closeCursor();
+	return $results;
+}
+
+function checkoutBook($isbn){
+    global $db;
+    
+    $query = "UPDATE Book SET copies_checked_out = copies_checked_out + 1 WHERE isbn = :isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$results = $statement->fetchAll();
+	$statement->closeCursor();
+	return $results;
+}
+
 function getReviewsForBook($isbn){
     global $db;
     $query = "SELECT * FROM Review WHERE isbn=:isbn";

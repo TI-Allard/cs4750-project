@@ -13,7 +13,9 @@
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
     $friends = getFriends($_SESSION["userN"]);
+    $reserves = getReservedBooks($_POST['userN']); 
   }
+
 
 
 ?>
@@ -114,6 +116,36 @@ if($current_user == $_SESSION["userN"]){
 </table>
 </div>  
 <!-- end of friend table -->
+
+
+<!-- start of reserved books table -->
+<h4>Reserved Books</h4>
+<div class="row justify-content-center">  
+<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+  <thead>
+  <tr style="background-color:#B0B0B0">
+    <th>Title</th>
+    <th>Author</th>
+  </tr>
+  </thead>
+<?php foreach ($reserves as $item): ?>
+  <tr>
+     <td><?php echo $item['title']; ?></td>
+     <td><?php echo $item['author']; ?></td>
+     <td>
+       <form action="bookinfo.php" method="post">
+         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+         <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
+       </form>
+       <form action="profile.php" method="post">
+         <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
+         <input type="hidden" name="returnedBook" value="<?php echo $item['isbn']; ?>"/>
+       </form>
+     </td>            
+  </tr>
+<?php endforeach; ?>
+</table>
+</div>  
 
   </body>
 </html>

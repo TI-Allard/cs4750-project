@@ -36,26 +36,12 @@
       if you want to change the navbar, you can do so in header.php -->
       <?php require("navbar.php") ?>
 <br>
+
+
+
+
 <!-- book table -->
-<div class="row justify-content-center">  
 
-<form action="search.php" method="post" >
-    <input type="text" placeholder="Search here" name="search_term" />
-    <input type="submit" value="Search" name="submit"/>
-</form>
-
-<?php
-    $search_term = $_POST['search_term'];
-    $result = searchForBooks($search_term);
-    if ($result->num_rows > 0){
-        while($row = $result->fetch_assoc() ){
-            echo $row["title"]."<br>";
-        }
-        } else {
-            echo "0 records";
-        }
-
-?>
 
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
@@ -67,7 +53,7 @@
     <?php endif; ?>
   </tr>
   </thead>
-<?php foreach ($books as $item): ?>
+<?php foreach ($result as $item): ?>
   <tr>
      <td><?php echo $item['title']; ?></td>
      <td>

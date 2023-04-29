@@ -196,6 +196,21 @@ function getBookByISBN($isbn){
 	$statement->closeCursor();
 	return $result;
 }
+
+function searchForBooks($search_term) {
+    global $db;
+    $search_term = htmlspecialchars($search_term);
+    //$search_term = mysql_real_escape_string($search_term);
+    $query = "select * from Book where (title like CONCAT('%', :search_term, '%')"; //or (author LIKE '%".$search_term."%')";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':search_term', $search_term, PDO::PARAM_STR);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
+
+
 function getBooksRead($username){   
     global $db;
     $query = "select * from HasRead NATURAL JOIN Book where username=:username";

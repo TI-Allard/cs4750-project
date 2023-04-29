@@ -297,6 +297,57 @@ function getAverageRating($isbn){
 
 }
 
+function setRequestAccept($un_1, $un_2){
+    global $db;
+    $query = "update FriendOf set accept=:accept where username1=:username1 AND username2=:username2";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':accept', TRUE);
+    $statement->bindValue(':username1', $un_1);
+    $statement->bindValue(':username2', $un_2);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+function setRequestReject($un_1, $un_2){
+    global $db;
+    $query = "update FriendOf set reject=:reject where username1=:username1 AND username2=:username2";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':reject', TRUE);
+    $statement->bindValue(':username1', $un_1);
+    $statement->bindValue(':username2', $un_2);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+function removeFriend($un_1, $un_2){
+    global $db;
+    $query = "delete from FriendOf where (username1=:username1 AND username2=:username2) or (username1=:username1 AND username2=:username2)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':username1', $un_1);
+    $statement->bindValue(':username2', $un_2);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+function setAdmin($username){
+    global $db;
+    $query = "update Profile set admin=:admin where username=:username";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':admin', TRUE);
+    $statement->bindValue(':username', $username);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+function deleteBook($isbn){
+    global $db;
+    //echo $review_id;
+    $query = "delete from Book where isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $statement->closeCursor();
+}
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

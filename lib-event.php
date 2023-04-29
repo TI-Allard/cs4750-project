@@ -3,12 +3,14 @@
   require("functions.php");
 //   $thisbook = getBookByISBN($_POST['book_to_view']);
 //   $reviews = getReviewsForBook($_POST['book_to_view']);
+//test !! 
   $contestlibevents = getContestEvents(); //selectAllLibEvents(); 
   $readinglibevents = getReadingEvents(); 
   $readings = null;//selectAllReadings(); 
   $contests = null;  //selectAllContests(); 
   session_start(); 
 ?>
+
 
 
 <!DOCTYPE html>

@@ -13,6 +13,7 @@
     $aor = getAverageRating($_POST['isbn']);
   }
   session_start();
+  $admin_logged_in = [FALSE];
 
   
   if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -86,7 +87,7 @@
             <th>Author</th>
             <th>Title</th>
             <th>Review Content</th>
-            <?php if($admin_logged_in == TRUE): ?>
+            <?php if($admin_logged_in[0] == TRUE): ?>
               <th>Inappropriate Review?</th>
             <?php endif; ?>
           </tr>
@@ -111,7 +112,7 @@
             </td>
             <td><?php echo $item['title']; ?></td>  
             <td><?php echo $item['body']; ?></td>  
-            <?php if($admin_logged_in == TRUE): ?>
+            <?php if($admin_logged_in[0] == TRUE): ?>
               <td>
                 <form action="bookinfo.php" method="post">
                   <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>

@@ -179,7 +179,7 @@ function reserveBook($isbn, $username){
 function deleteReservation($isbn, $username){
     global $db;
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query = "delete from Reserves where isbn=:isbn AND username=:username)";
+    $query = "delete from Reserves where (isbn=:isbn AND username=:username)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
     $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT

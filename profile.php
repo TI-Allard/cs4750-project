@@ -23,6 +23,7 @@
        $availability = $booktocheckout['total_copies'] - $booktocheckout['copies_checked_out'];
        if ($booktocheckout['copies_checked_out'] < $booktocheckout['total_copies']){
           checkoutBook($_POST['isbn']); 
+          
        }
       else{
           echo "That book is not available! Sorry!"; 

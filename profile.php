@@ -20,14 +20,13 @@
     $admin = getRole($_POST['user_to_view']); 
     $current_user = $_POST['user_to_view'];
     $friends = getFriends($_POST['user_to_view']);
-    $reserves = getReservedBooks($_SESSION["user_to_view"]);
+    // $reserves = getReservedBooks($_SESSION["user_to_view"]);
   }elseif(isset($_POST['user_to_make_admin'])){
     setAdmin($_POST['user_to_make_admin']);
     $booksread = getBooksRead($_POST['user_to_make_admin']);
     $admin = getRole($_POST['user_to_make_admin']); 
     $current_user = $_POST['user_to_make_admin'];
     $friends = getFriends($_POST['user_to_make_admin']);
-    $reserves = getReservedBooks($_SESSION["userN"]);
   }elseif(isset($_SESSION["userN"])){ 
     $booksread = getBooksRead($_SESSION["userN"]);
     $admin = getRole($_SESSION["userN"]);
@@ -35,7 +34,6 @@
     $friends = getFriends($_SESSION["userN"]); 
     $reserves = getReservedBooks($_SESSION["userN"]);
   }
-  var_dump($reserves); 
   if(isset($_SESSION["userN"])){
     $admin_logged_in = getRole($_SESSION["userN"]);
   }
@@ -48,7 +46,7 @@
        $totalcopiestemp = $booktocheckout['total_copies']; 
        $copiescheckedouttemp = $booktocheckout['copies_checked_out']; 
 
-      //  $reserves = getReservedBooks($_POST['user_checking_out']);
+       $reserves = getReservedBooks($_POST['user_checking_out']);
 
         // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
 
@@ -60,8 +58,19 @@
        echo "CopiesCheckedOut is $copiescheckedouttemp";
        echo "total copies is $totalcopiestemp";
        if ($booktocheckout['copies_checked_out'] < $booktocheckout['total_copies']){
-          checkoutBook($_POST['isbn'], $copiescheckedouttemp+1); 
-          // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
+          $copiescheckedouttemp = $copiescheckedouttemp +1; 
+          checkoutBook($_POST['book_to_checkout'], $copiescheckedouttemp); 
+
+          echo "The is going to be after checkout "; 
+          $booktocheckout = getBookByISBN($_POST['book_to_checkout']);
+          echo $booktocheckout['title']; 
+          echo $booktocheckout['total_copies']; 
+          echo $booktocheckout['copies_checked_out']; 
+          //yay!!! it works now!!! 
+
+
+          reserveBook($booktocheckout['isbn'], $_POST("user_checking_out")); 
+          // $reserves = getReservedBooks($_POST['user_checking_out']); 
           echo 'DO I EVEN GET HEREE???'; 
        }
       else{
@@ -277,33 +286,41 @@ foreach ($friends as $item){
 <!-- end of friend request table -->
 
 <!-- start of reserved books table -->
-<h4>Reserved Books</h4>
-<div class="row justify-content-center">  
-<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-  <thead>
-  <tr style="background-color:#B0B0B0">
-    <th>Title</th>
-    <th>Author</th>
-  </tr>
-  </thead>
-<?php foreach ($reserves as $item): ?>
-  <tr>
-     <td><?php echo $item['title']; ?></td>
-     <td><?php echo $item['author']; ?></td>
-     <!-- <td>
-       <form action="bookinfo.php" method="post">
-         <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-         <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
-       </form>
-       <form action="profile.php" method="post">
-         <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
-         <input type="hidden" name="returnedBook" value="<?php echo $item['isbn']; ?>"/>
-       </form>
-     </td>             -->
-  </tr>
-<?php endforeach; ?>
-</table>
-</div>  
+<?php if ($admin_logged_in[0]==TRUE OR $current_user==$_SESSION["userN"]): ?>
+  <?php if ($admin_logged_in[0]==TRUE) : ?>
+    <?php $reserves = getReservedBooks($_POST['user_to_view']); ?>
+  <?php endif; ?>
+  <h4>Reserved Books</h4>
+  <div class="row justify-content-center">  
+  <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+    <thead>
+    <tr style="background-color:#B0B0B0">
+      <th>Title</th>
+      <th>Author</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+  <?php foreach ($reserves as $item): ?>
+    <tr>
+      <td><?php echo $item['title']; ?></td>
+      <td><?php echo $item['author']; ?></td>
+      <td>
+        <form action="bookinfo.php" method="post">
+          <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+          <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
+        </form>
+        <form action="profile.php" method="post">
+          <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
+          <input type="hidden" name="returnedBook" value="<?php echo $item['isbn']; ?>"/>
+        </form>
+      </td>            
+    </tr>
+  <?php endforeach; ?>
+  </table>
+  </div>  
+<?php endif; ?>
+
+
 
   </body>
 </html>

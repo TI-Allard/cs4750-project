@@ -75,18 +75,27 @@
       }
        
      }
-     if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Have Read")){
-      if(isset($_SESSION["userN"])){
-
-        echo "do you get inside the if statement for hasread? "; 
-        //$_POST['book_to_have_read']
-        //$_POST['user_of_have_read']
-        addHasRead($_POST['book_to_have_read'], $_POST['user_of_have_read']); 
-        
-        echo "do you register as has read? "; 
-      }
-     }//have read if statement 
    }
+   if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Have Read")){
+    if(isset($_SESSION["userN"])){
+
+      echo "do you get inside the if statement for hasread? "; 
+      //$_POST['book_to_have_read']
+      //$_POST['user_of_have_read']
+      addHasRead($_POST['book_to_have_read'], $_POST['user_of_have_read']); 
+      
+      echo "do you register as has read? "; 
+    }
+   }//have read if statement 
+   if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Return")){
+    if(isset($_SESSION["userN"])){
+      $book_to_return = getBookByISBN($_POST['returned_book']); 
+      $copies_to_return = $book_to_return['copies_checked_out'] - 1; 
+      echo "this is what it is for copies checked out after $copies_to_return"; 
+      returnBook($book_to_return['isbn'], $copies_to_return); 
+      deleteReservation($book_to_return['isbn'], $current_user); 
+    }
+   }//have read if statement 
  }
 
 
@@ -320,7 +329,7 @@ foreach ($friends as $item){
         </form>
         <form action="profile.php" method="post">
           <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
-          <input type="hidden" name="returnedBook" value="<?php echo $item['isbn']; ?>"/>
+          <input type="hidden" name="returned_book" value="<?php echo $item['isbn']; ?>"/>
         </form>
       </td>            
     </tr>

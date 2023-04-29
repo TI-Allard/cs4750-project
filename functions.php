@@ -349,6 +349,18 @@ function getAverageRating($isbn){
 
 }
 
+function addFriend($un_1, $un_2){
+    global $db;
+    $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':username1', $un_1);
+    $statement->bindValue(':username2', $un_2);
+    $statement->bindValue(':acc', FALSE);
+    $statement->bindValue(':rej', FALSE);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
 function setRequestAccept($un_1, $un_2){
     global $db;
     $query = "update FriendOf set accept=:accept where username1=:username1 AND username2=:username2";

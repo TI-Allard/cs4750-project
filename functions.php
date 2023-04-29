@@ -20,6 +20,11 @@
 
 $uname = null;
 
+// for error reporting 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
 function authenticateUser($username, $pswd)
 {
 	global $db;
@@ -146,27 +151,52 @@ function getAvailability($isbn){ //idk if i need this
 	return $results;
 }
 
-function reserveBook($isbn, $username){ //insert statements do not fetch anything! 
+function reserveBook($isbn, $username){
     global $db;
-    
-    $query = "INSERT INTO Reserves VALUES (:isbn, :username)";
-	$statement = $db->prepare($query);
-	$statement->bindValue(':isbn', $isbn);
+    $query = "insert into Reserves (isbn, username) values (:isbn, :username)";
+    //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
     $statement->bindValue(':username', $username);
-	$statement->execute();
-	$statement->closeCursor();
+    $statement->execute();
+    $statement->closeCursor();
 }
+
+// function reserveBook($isbn, $username){ //insert statements do not fetch anything! 
+//     global $db;
+    
+//     $query = "insert into Reserves values (:isbn, :username)";
+
+//     try {
+//         $statement = $db->prepare($query);
+// 	    $statement->bindValue(':isbn', $isbn);
+//         $statement->bindValue(':username', $username);
+// 	    $statement->execute();
+//     } catch (PDOException $e){
+//         echo "An issue occured adding that reservation!"; 
+//     }
+// 	$statement->closeCursor();
+// }
 
 function checkoutBook($isbn, $copies_checked_out){
     global $db;
     
-    $query = "UPDATE Book SET copies_checked_out =:copies_checked_out WHERE isbn = :isbn";
+    $query = "UPDATE Book SET copies_checked_out=:copies_checked_out WHERE isbn=:isbn";
 	$statement = $db->prepare($query);
     $statement->bindValue(':copies_checked_out', $copies_checked_out);
 	$statement->bindValue(':isbn', $isbn);
 	$statement->execute();
-	// $results = $statement->fetchAll();
+	// $results = $statement->fetchAll(); 
 	$statement->closeCursor();
+
+    // $query2 = "insert into Reserves values (:isbn, :username)"; 
+    // $statement2 = $db->prepare($query2);
+    // $statement2->bindValue(':isbn', $isbn);
+	// $statement2->bindValue(':username', $username);
+	// $statement2->execute();
+	// $statement2->closeCursor();
+
+    
 	// return $results;
 }
 

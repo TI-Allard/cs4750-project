@@ -46,7 +46,7 @@
        $totalcopiestemp = $booktocheckout['total_copies']; 
        $copiescheckedouttemp = $booktocheckout['copies_checked_out']; 
 
-      //  $reserves = getReservedBooks($_POST['user_checking_out']);
+       $reserves = getReservedBooks($_POST['user_checking_out']);
 
         // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
 

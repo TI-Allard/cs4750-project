@@ -153,7 +153,7 @@ function getAvailability($isbn){ //idk if i need this
 
 function reserveBook($isbn, $username){
     global $db;
-    $query = "insert into Reserves (isbn, username) values (:isbn, :username)";
+    $query = "insert into Reserves values (:isbn, :username)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
     $statement->bindValue(':isbn', $isbn);

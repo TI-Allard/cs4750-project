@@ -3,7 +3,6 @@
   require("functions.php");
   $books = selectAllBooks();
   session_start();
-  $admin_logged_in = [FALSE];
   if(isset($_POST['isbn'])){
     deleteBook($_POST['isbn']);
   }
@@ -37,38 +36,24 @@
       if you want to change the navbar, you can do so in header.php -->
       <?php require("navbar.php") ?>
 <br>
+
+
+
+
 <!-- book table -->
-<div class="row justify-content-center">  
 
-<form action="search.php" method="post" >
-    <input type="text" placeholder="Search here" name="search_term" />
-    <input type="submit" value="Search" name="submit"/>
-</form>
-
-<?php
-    $search_term = $_POST['search_term'];
-    $result = searchForBooks($search_term);
-    if ($result->num_rows > 0){
-        while($row = $result->fetch_assoc() ){
-            echo $row["title"]."<br>";
-        }
-        } else {
-            echo "0 records";
-        }
-
-?>
 
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">
     <th>Title</th>
     <th>Book Information</th>
-    <?php if($admin_logged_in[0] == TRUE): ?>
+    <?php if($admin_logged_in == TRUE): ?>
       <th>Remove Book?</th>
     <?php endif; ?>
   </tr>
   </thead>
-<?php foreach ($books as $item): ?>
+<?php foreach ($result as $item): ?>
   <tr>
      <td><?php echo $item['title']; ?></td>
      <td>
@@ -77,7 +62,7 @@
          <input type="hidden" name="book_to_view" value="<?php echo $item['isbn']; ?>"/>
        </form>
      </td>     
-     <?php if($admin_logged_in[0] == TRUE): ?>
+     <?php if($admin_logged_in == TRUE): ?>
       <td>
         <form action="home.php" method="post">
           <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>

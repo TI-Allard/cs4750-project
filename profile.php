@@ -202,29 +202,32 @@ foreach ($friends as $item){
     </thead>
   <?php foreach ($friends as $item): ?>
     <tr>
+      <?php $friend = NULL; ?>
       <td><?php if(($current_user != $item['username1']) AND ($item['accept'] == TRUE)){
         $friend = $item['username1']; 
       }
       elseif(($current_user == $item['username1']) AND ($item['accept'] == TRUE)){
         $friend = $item['username2']; 
       }
-      echo $friend;
-      ?></td>
-      <td>
-        <?php if($current_user != $item['username1'] AND ($item['accept'] == TRUE)): ?>
+      if($friend <> NULL): 
+        echo $friend;
+        ?></td>
+        <td>
+          <?php if($current_user != $item['username1'] AND ($item['accept'] == TRUE)): ?>
+            <form action="profile.php" method="post">
+              <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+              <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
+            </form>
+          <?php endif; ?>
+        </td> 
+        <td>
+        <?php if(($friend <> $_SESSION['userN']) AND ($item['accept'] == TRUE)): ?>
           <form action="profile.php" method="post">
-            <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-            <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
+            <input type="submit" class="btn btn-secondary" name="actionBtn" value="Remove Friend"/>
+            <input type="hidden" name="usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
+            <input type="hidden" name="friend_to_remove" value="<?php echo $friend; ?>"/>
           </form>
         <?php endif; ?>
-      </td> 
-      <td>
-      <?php if(($friend <> $_SESSION['userN']) AND ($item['accept'] == TRUE)): ?>
-        <form action="profile.php" method="post">
-          <input type="submit" class="btn btn-secondary" name="actionBtn" value="Remove Friend"/>
-          <input type="hidden" name="usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
-          <input type="hidden" name="friend_to_remove" value="<?php echo $friend; ?>"/>
-        </form>
       <?php endif; ?>
       </td>            
     </tr>

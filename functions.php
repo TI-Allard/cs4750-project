@@ -552,18 +552,43 @@ function deleteBook($isbn){
     $statement->closeCursor();
 }
 
-// function addBook($un_1, $un_2){
-//     global $db;
-//     $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-//     $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
-//     $statement = $db->prepare($query);
-//     $statement->bindValue(':username1', $un_1);
-//     $statement->bindValue(':username2', $un_2);
-//     $statement->bindValue(':acc', 0);
-//     $statement->bindValue(':rej', 0);
-//     $statement->execute();
-//     $statement->closeCursor();
-// }
+function emptyInputBook($isbn, $title, $author, $total_copies){
+    if (empty($isbn) || empty($title) || empty($author) || empty($title)){
+        $result = true;
+    }
+    else {
+        $result = false;
+    }
+    return $result;
+}
+
+function invalidDate($date) {
+    if (!preg_match("/^[0-9]{1,2}\/[0-9]{1,2}\/[1-2]{1}[0-9]{3}$/", $date) AND ($date <> NULL)){
+        $result = true;
+    }
+    else {
+        $result = false;
+    }
+    return $result;
+}
+
+function addBook($isbn, $title, $author, $genre, $date_published, $book_cover, $total_copies, $copies_checked_out, $average_rating){
+    global $db;
+    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+    $query = "insert into Book (isbn, title, author, genre, date_published, book_cover, total_copies, copies_checked_out, average_rating) values (:isbn, :title, :author, :genre, :date_published, :book_cover, :total_copies, :copies_checked_out, :average_rating)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':title', $title);
+    $statement->bindValue(':author', $author);
+    $statement->bindValue(':genre', $genre);
+    $statement->bindValue(':date_published', $date_published);
+    $statement->bindValue(':book_cover', $book_cover);
+    $statement->bindValue(':total_copies', $total_copies);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+    $statement->bindValue(':average_rating', $average_rating);
+    $statement->execute();
+    $statement->closeCursor();
+}
 
 // CODE FROM CLASS
 // function getFriendInfo_by_name($name)

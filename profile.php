@@ -159,13 +159,13 @@ foreach ($friends as $item){
 
 ?>
 
-<?php if($friend_in_table == FALSE): echo "not want"?>
+<?php if($friend_in_table == FALSE): ?>
   <form action="profile.php" method="post">
     <input type="submit" class="btn btn-secondary" name="actionBtn" value="Add Friend Request"/>
     <input type="hidden" name="us_1" value="<?php echo $_SESSION['userN']; ?>"/>
     <input type="hidden" name="us_2" value="<?php echo $current_user; ?>"/>
   </form>
-<?php elseif($want_to_be_friend == TRUE): echo "want"?>
+<?php elseif($want_to_be_friend == TRUE): ?>
   <form action="profile.php" method="post">
     <input type="submit" class="btn btn-secondary" name="actionBtn" value="Add Friend Request"/>
     <input type="hidden" name="want_usern_1" value="<?php echo $_SESSION['userN']; ?>"/>

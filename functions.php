@@ -328,6 +328,21 @@ function createreview($isbn, $username, $title, $body){
     $statement->closeCursor();
 }
 
+function addBookRating($isbn, $username, $overall_stars, $plot, $characters, $writing_style){
+    global $db;
+    $query = "insert into Rating values (:isbn, NULL, :username, :overall_stars, :plot, :characters, :writing_style)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->bindValue(':overall_stars', $overall_stars);
+    $statement->bindValue(':plot', $plot);
+    $statement->bindValue(':characters', $characters);
+    $statement->bindValue(':writing_style', $writing_style);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+
 function getRole($username){   
     global $db;
     $query = "select admin from Profile where username=:username";

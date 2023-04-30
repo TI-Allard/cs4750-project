@@ -44,6 +44,16 @@
       deleteReview($_POST['review_to_delete']);
       $reviews = getReviewsForBook($_POST['isbn']);
   
+    //create rating
+    }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Rate Book")){
+      if(isset($_SESSION["userN"])) {
+        addBookRating($_POST['isbn'], $_SESSION["userN"], $_POST['overall_stars'], $_POST['plot'], $_POST['characters'], $_POST['writing_style']);
+        $aor = getAverageOverallRating($_POST['isbn']);
+        $apr = getAveragePlotRating($_POST['isbn']);
+        $acr = getAverageCharactersRating($_POST['isbn']);
+        $awsr = getAverageWritingStyleRating($_POST['isbn']);
+      }
+  
     }
 
     //confirm update
@@ -175,7 +185,34 @@
       </table>
     </div>
 
+    <!-- create rating form -->
+    <h3> Rate This Book </h3>
+    <p> Rate the book on the following critera on a scale 1-5 with 5 being most positive. </p>
+    <form name="mainForm" action="bookinfo.php" method="post">   
+    <div class="row mb-3 mx-3">
+      Overall Rating:
+      <input type="number" name="overall_stars" min="1" max="5" required>
+    </div>
+    <div class="row mb-3 mx-3">
+      Plot Rating:
+      <input type="number" name="plot" min="1" max="5" required>
+    </div>  
+    <div class="row mb-3 mx-3">
+      Characters Rating:
+      <input type="number" name="characters" min="1" max="5" required>
+    </div>
+    <div class="row mb-3 mx-3">
+      Writing Style Rating:
+      <input type="number" name="writing_style" min="1" max="5" required>
+    </div> 
+    <div class="row mb-3 mx-3">
+      <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>   
+      <input type="submit" class="btn btn-primary" name="actionBtn" value="Rate Book" title="Rate Book" />       
+    </div>
+  </form>    
+
     <!-- create review form -->
+    <h3> Review This Book </h3>
     <form name="mainForm" action="bookinfo.php" method="post">   
   <div class="row mb-3 mx-3">
     Title:

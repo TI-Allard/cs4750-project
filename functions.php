@@ -379,6 +379,23 @@ function getAverageRating($isbn){
 
 }
 
+function getAvailabilityStatus($copies_checked_out, $total_copies){
+    global $db;
+	$query = "SELECT status 
+        from Book, CopyInfo 
+        where Book.copies_checked_out = CopyInfo.copies_checked_out 
+            AND Book.total_copies = CopyInfo.total_copies 
+            AND Book.copies_checked_out=:copies_checked_out 
+            AND Book.total_copies=:total_copies";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+    $statement->bindValue(':total_copies', $total_copies);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
 function addFriend($un_1, $un_2){
     global $db;
     $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";

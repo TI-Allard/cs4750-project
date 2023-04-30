@@ -13,6 +13,8 @@
     $reviews = getReviewsForBook($_POST['isbn']); 
     $aor = getAverageRating($_POST['isbn']);
   }
+
+  $availability = getAvailabilityStatus($thisbook['copies_checked_out'], $thisbook['total_copies']);
   session_start();
   $admin_logged_in = [FALSE];
 
@@ -76,7 +78,7 @@
       <br>
       ISBN: <?php echo $thisbook['isbn']?>
       <br>
-      Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>
+      Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>, <?php echo $availability[0][0]?>
       <br>
       Average Overall Rating: <?php echo $aor[0][0]?>
       <br>

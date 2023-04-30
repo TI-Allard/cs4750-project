@@ -107,22 +107,14 @@ if(isset($_GET["error"])){
 <!-- book table -->
 <div class="row justify-content-center">  
 <form action="search.php" method="post" >
-    <input type="text" placeholder="Search here" name="search_term" />
+    <div class="center mb-3 mx-3">
+      <input type="text" placeholder="Search here" name="search_term" />
+    
     <input type="submit" value="Search" name="submit"/>
+    </div>
 </form>
 
-<?php
-    $search_term = $_POST['search_term'];
-    $result = searchForBooks($search_term);
-    if ($result->num_rows > 0){
-        while($row = $result->fetch_assoc() ){
-            echo $row["title"]."<br>";
-        }
-        } else {
-            echo "0 records";
-        }
 
-?>
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">

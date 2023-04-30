@@ -52,29 +52,16 @@
        $copiescheckedouttemp = $booktocheckout['copies_checked_out']; 
 
       //  $reserves = getReservedBooks($_POST['user_checking_out']);
-
         // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
-       echo $_POST["user_checking_out"]; 
-       echo "isbn is gonna come next "; 
-       echo $_POST['book_to_checkout']; 
-
-       echo "CopiesCheckedOut is $copiescheckedouttemp";
-       echo "total copies is $totalcopiestemp";
        if ($booktocheckout['copies_checked_out'] < $booktocheckout['total_copies']){
           $copiescheckedouttemp = $copiescheckedouttemp +1; 
           checkoutBook($_POST['book_to_checkout'], $copiescheckedouttemp); 
-
-          echo "The is going to be after checkout "; 
+          
           $booktocheckout = getBookByISBN($_POST['book_to_checkout']);
-          echo $booktocheckout['title']; 
-          echo $booktocheckout['total_copies']; 
-          echo $booktocheckout['copies_checked_out']; 
-          //yay!!! it works now!!! 
-
-
+         
           reserveBook($booktocheckout['isbn'], $_POST['user_checking_out']); 
           // $reserves = getReservedBooks($_POST['user_checking_out']); 
-          echo 'DO I EVEN GET HEREE???'; 
+          
        }
       else{
           echo "That book is not available! Sorry!"; 

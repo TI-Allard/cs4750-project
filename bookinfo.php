@@ -98,6 +98,7 @@
       <br>
       Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>, <?php echo $availability[0][0]?>
       <br>
+      <?php if($aor[0][0]): ?>
       Average Overall Rating: <?php echo $aor[0][0]?>
       <br>
       Average Plot Rating: <?php echo $apr[0][0]?>
@@ -106,6 +107,7 @@
       <br>
       Average Writing-Style Rating: <?php echo $awsr[0][0]?>
       <br>
+      <?php endif; ?> 
     </p>
     <div> 
       <!-- this is going to be testing if else functionality  -->

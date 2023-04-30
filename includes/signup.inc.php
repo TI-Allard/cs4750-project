@@ -28,6 +28,11 @@ if(isset($_POST["submit"])) {
         header("location: ../signup.php?error=usernametaken");
         exit();
     }
+
+    if(pswdLength($pswd) !== false) {
+        header("location: ../signup.php?error=passwordtooshort");
+        exit();
+    }
     //echo "help6";
 
     createUser($userN, $pswd);

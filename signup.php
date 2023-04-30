@@ -86,6 +86,9 @@ session_start();
 		else if($_GET["error"] == "usernametaken"){
 			echo "<p>Username already taken. Choose a different username.</p>";
 		}
+        else if($_GET["error"] == "passwordtooshort"){
+			echo "<p>Password too short. Needs to be at least 8 characters.</p>";
+		}
 		else if($_GET["error"] == "none") {
 			echo "<p>You have successfully signed up.</p>";
 		}

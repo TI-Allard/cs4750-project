@@ -34,6 +34,17 @@ function pswdMatch($pswd, $pswdRepeat) {
     return $result;
 }
 
+function pswdLength($pswd) {
+    //$result
+    if(strlen($pswd) < 8) {
+        $result = true;
+    }
+    else {
+        $result = false;
+    }
+    return $result;
+}
+
 function usernameExists($userN) {
     //$result
     global $db;
@@ -54,10 +65,11 @@ function usernameExists($userN) {
 
 function createUser($userN, $pswd) {
     //$result
+    global $db;
+    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     date_default_timezone_set('America/New_York');
     $date = date('Y-m-d h:i:s', time()); 
-    global $db;
-    $query = "INSERT INTO Profile (username, pswd, date_of_membership) VALUES (:username, :pswd, :dte)";
+    $query = "insert INTO Profile (username, pswd, date_of_membership, admin) VALUES (:username, :pswd, :dte, :admin)";
 	$statement = $db->prepare($query);
     //echo "help8";
     //echo $userN;
@@ -67,10 +79,12 @@ function createUser($userN, $pswd) {
     $statement->bindValue(':username', $userN);
     $statement->bindValue(':pswd', $pswd);
     $statement->bindValue(':dte', $date);
+    $statement->bindValue(':admin', 0);
     $statement->execute();
     $statement->closeCursor();
     //echo "help10";
     header("location: ../signup.php?error=none");
+    echo "in createUser";
     exit();
 }
 

@@ -367,9 +367,45 @@ function getReviewByID($review_id){
 	return $result;
 }
 
-function getAverageRating($isbn){
+function getAverageOverallRating($isbn){
     global $db;
 	$query = "SELECT AVG(overall_stars) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+function getAveragePlotRating($isbn){
+    global $db;
+	$query = "SELECT AVG(plot) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+function getAverageCharactersRating($isbn){
+    global $db;
+	$query = "SELECT AVG(characters) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+function getAverageWritingStyleRating($isbn){
+    global $db;
+	$query = "SELECT AVG(writing_style) FROM Rating WHERE isbn=:isbn";
     $statement = $db->prepare($query);
     $statement->bindValue(':isbn', $isbn);
     $statement->execute();

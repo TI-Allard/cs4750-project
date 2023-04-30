@@ -7,11 +7,19 @@
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
     $reviews = getReviewsForBook($_POST['book_to_view']); 
-    $aor = getAverageRating($_POST['book_to_view']);
+    //ratings!
+    $aor = getAverageOverallRating($_POST['book_to_view']);
+    $apr = getAveragePlotRating($_POST['book_to_view']);
+    $acr = getAverageCharactersRating($_POST['book_to_view']);
+    $awsr = getAverageWritingStyleRating($_POST['book_to_view']);
   }else { 
     $thisbook = getBookByISBN($_POST['isbn']);
     $reviews = getReviewsForBook($_POST['isbn']); 
-    $aor = getAverageRating($_POST['isbn']);
+    //ratings
+    $aor = getAverageOverallRating($_POST['isbn']);
+    $apr = getAveragePlotRating($_POST['isbn']);
+    $acr = getAverageCharactersRating($_POST['isbn']);
+    $awsr = getAverageWritingStyleRating($_POST['isbn']);
   }
 
   $availability = getAvailabilityStatus($thisbook['copies_checked_out'], $thisbook['total_copies']);
@@ -81,6 +89,12 @@
       Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>, <?php echo $availability[0][0]?>
       <br>
       Average Overall Rating: <?php echo $aor[0][0]?>
+      <br>
+      Average Plot Rating: <?php echo $apr[0][0]?>
+      <br/>
+      Average Characters Rating: <?php echo $acr[0][0]?>
+      <br>
+      Average Writing-Style Rating: <?php echo $awsr[0][0]?>
       <br>
     </p>
     <div> 

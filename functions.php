@@ -164,10 +164,22 @@ function getAvailability($isbn){ //idk if i need this
 	return $results;
 }
 
+function getReservation($reserve_id){ //idk if i need this 
+    global $db;
+    
+    $query = "SELECT  FROM Reserves WHERE (reserve_id=:reserve_id)";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':reserve_id', $reserve_id);
+	$statement->execute();
+	$results = $statement->fetch();
+	$statement->closeCursor();
+	return $results;
+}
+
 function reserveBook($isbn, $username){
     global $db;
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query = "insert into Reserves values (:isbn, :username)";
+    $query = "insert into Reserves values (NULL, :isbn, :username)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
     $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT
@@ -176,14 +188,14 @@ function reserveBook($isbn, $username){
     $statement->closeCursor();
 }
 
-function deleteReservation($isbn, $username){
+function deleteReservation($reserve_id){
     global $db;
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query = "delete from Reserves where (isbn=:isbn AND username=:username)";
+    $query = "delete from Reserves where (reserve_id=:reserve_id)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
-    $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT
-    $statement->bindValue(':username', $username);
+    // $statement->bindValue(':isbn', $isbn); //PDO::PARAM_INT
+    $statement->bindValue(':reserve_id', $reserve_id);
     $statement->execute();
     $statement->closeCursor();
 }

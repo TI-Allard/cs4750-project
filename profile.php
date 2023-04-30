@@ -93,7 +93,14 @@
       $copies_to_return = $book_to_return['copies_checked_out'] - 1; 
       echo "this is what it is for copies checked out after $copies_to_return"; 
       returnBook($book_to_return['isbn'], $copies_to_return); 
-      deleteReservation($book_to_return['isbn'], $current_user); 
+      echo "returned yay!!!"; 
+      // $get_reserve_id = getReservation($_POST['reserve_id']); 
+
+      
+
+      deleteReservation($_POST['reserve_id']); 
+      echo "i successfully deleted yay!"; 
+      //$book_to_return['isbn'], $current_user); 
     }
    }
  }
@@ -334,6 +341,7 @@ foreach ($friends as $item){
         <form action="profile.php" method="post">
           <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
           <input type="hidden" name="returned_book" value="<?php echo $item['isbn']; ?>"/>
+          <input type="hidden" name="reserve_id" value="<?php echo $item['reserve_id']; ?>"/>
         </form>
       </td>            
     </tr>

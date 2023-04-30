@@ -121,6 +121,7 @@
           <p> Random Thing </p>
       <?php endif; ?>
     </div>
+    <?php ?>
     <?php if ($thisbook['total_copies'] - $thisbook['copies_checked_out'] != 0): ?>
       <div>
           <form name="checkout" action= "profile.php" method="post">

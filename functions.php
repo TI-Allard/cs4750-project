@@ -457,6 +457,19 @@ function getAverageWritingStyleRating($isbn){
 
 }
 
+function getUserBookRating($isbn, $username){
+    //SELECT * FROM Rating WHERE username=:username AND isbn=:isbn
+    global $db;
+	$query = "SELECT * FROM Rating WHERE username=:username AND isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':username', $username);
+    $statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
+
 function getAvailabilityStatus($copies_checked_out, $total_copies){
     global $db;
 	$query = "SELECT status 

@@ -184,8 +184,16 @@
         <?php endforeach; ?>
       </table>
     </div>
-
-    <!-- create rating form -->
+    
+  <?php if(isset($_SESSION["userN"]) && getUserBookRating($thisbook['isbn'], $_SESSION["userN"])): ?>
+      <p> You rated this book:</p>
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[3]?> Overall,
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[4]?> Plot,
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[5]?> Characters, 
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[6]?> Writing-Style 
+  <?php else: ?>
+    <?php if(isset($_SESSION["userN"])): ?>
+      <!-- create rating form, getUserBookRating($isbn, $username) -->
     <h3> Rate This Book </h3>
     <p> Rate the book on the following critera on a scale 1-5 with 5 being most positive. </p>
     <form name="mainForm" action="bookinfo.php" method="post">   
@@ -209,8 +217,11 @@
       <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>   
       <input type="submit" class="btn btn-primary" name="actionBtn" value="Rate Book" title="Rate Book" />       
     </div>
-  </form>    
+  </form>   
+    <?php endif; ?> 
+  <?php endif; ?>  
 
+  <?php if(isset($_SESSION["userN"])): ?>
     <!-- create review form -->
     <h3> Review This Book </h3>
     <form name="mainForm" action="bookinfo.php" method="post">   
@@ -231,7 +242,8 @@
     <input type="hidden" name="reviewID" value="<?php echo $_POST['review_to_edit']; ?>"/> 
     <input type="submit" class="btn btn-primary" name="actionBtn" value="Confirm Edit" title="Confirm Edit" />        
   </div>
-  </form>    
+  </form>
+  <?php endif; ?>    
 
   </body>
 </html>

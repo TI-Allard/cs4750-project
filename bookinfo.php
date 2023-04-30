@@ -7,12 +7,22 @@
   if(isset($_POST['book_to_view'])){
     $thisbook = getBookByISBN($_POST['book_to_view']);
     $reviews = getReviewsForBook($_POST['book_to_view']); 
-    $aor = getAverageRating($_POST['book_to_view']);
+    //ratings!
+    $aor = getAverageOverallRating($_POST['book_to_view']);
+    $apr = getAveragePlotRating($_POST['book_to_view']);
+    $acr = getAverageCharactersRating($_POST['book_to_view']);
+    $awsr = getAverageWritingStyleRating($_POST['book_to_view']);
   }else { 
     $thisbook = getBookByISBN($_POST['isbn']);
     $reviews = getReviewsForBook($_POST['isbn']); 
-    $aor = getAverageRating($_POST['isbn']);
+    //ratings
+    $aor = getAverageOverallRating($_POST['isbn']);
+    $apr = getAveragePlotRating($_POST['isbn']);
+    $acr = getAverageCharactersRating($_POST['isbn']);
+    $awsr = getAverageWritingStyleRating($_POST['isbn']);
   }
+
+  $availability = getAvailabilityStatus($thisbook['copies_checked_out'], $thisbook['total_copies']);
   session_start();
   $admin_logged_in = [FALSE];
 
@@ -33,6 +43,16 @@
     }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Delete")){
       deleteReview($_POST['review_to_delete']);
       $reviews = getReviewsForBook($_POST['isbn']);
+  
+    //create rating
+    }else if((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Rate Book")){
+      if(isset($_SESSION["userN"])) {
+        addBookRating($_POST['isbn'], $_SESSION["userN"], $_POST['overall_stars'], $_POST['plot'], $_POST['characters'], $_POST['writing_style']);
+        $aor = getAverageOverallRating($_POST['isbn']);
+        $apr = getAveragePlotRating($_POST['isbn']);
+        $acr = getAverageCharactersRating($_POST['isbn']);
+        $awsr = getAverageWritingStyleRating($_POST['isbn']);
+      }
   
     }
 
@@ -76,10 +96,18 @@
       <br>
       ISBN: <?php echo $thisbook['isbn']?>
       <br>
-      Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>
+      Copies Available: <?php echo $thisbook['total_copies'] - $thisbook['copies_checked_out']?>, <?php echo $availability[0][0]?>
       <br>
+      <?php if($aor[0][0]): ?>
       Average Overall Rating: <?php echo $aor[0][0]?>
       <br>
+      Average Plot Rating: <?php echo $apr[0][0]?>
+      <br/>
+      Average Characters Rating: <?php echo $acr[0][0]?>
+      <br>
+      Average Writing-Style Rating: <?php echo $awsr[0][0]?>
+      <br>
+      <?php endif; ?> 
     </p>
     <div> 
       <!-- this is going to be testing if else functionality  -->
@@ -158,8 +186,46 @@
         <?php endforeach; ?>
       </table>
     </div>
+    
+  <?php if(isset($_SESSION["userN"]) && getUserBookRating($thisbook['isbn'], $_SESSION["userN"])): ?>
+      <p> You rated this book:</p>
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[3]?> Overall,
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[4]?> Plot,
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[5]?> Characters, 
+      <?php echo getUserBookRating($thisbook['isbn'], $_SESSION["userN"])[6]?> Writing-Style 
+  <?php else: ?>
+    <?php if(isset($_SESSION["userN"])): ?>
+      <!-- create rating form, getUserBookRating($isbn, $username) -->
+    <h3> Rate This Book </h3>
+    <p> Rate the book on the following critera on a scale 1-5 with 5 being most positive. </p>
+    <form name="mainForm" action="bookinfo.php" method="post">   
+    <div class="row mb-3 mx-3">
+      Overall Rating:
+      <input type="number" name="overall_stars" min="1" max="5" required>
+    </div>
+    <div class="row mb-3 mx-3">
+      Plot Rating:
+      <input type="number" name="plot" min="1" max="5" required>
+    </div>  
+    <div class="row mb-3 mx-3">
+      Characters Rating:
+      <input type="number" name="characters" min="1" max="5" required>
+    </div>
+    <div class="row mb-3 mx-3">
+      Writing Style Rating:
+      <input type="number" name="writing_style" min="1" max="5" required>
+    </div> 
+    <div class="row mb-3 mx-3">
+      <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>   
+      <input type="submit" class="btn btn-primary" name="actionBtn" value="Rate Book" title="Rate Book" />       
+    </div>
+  </form>   
+    <?php endif; ?> 
+  <?php endif; ?>  
 
+  <?php if(isset($_SESSION["userN"])): ?>
     <!-- create review form -->
+    <h3> Review This Book </h3>
     <form name="mainForm" action="bookinfo.php" method="post">   
   <div class="row mb-3 mx-3">
     Title:
@@ -178,7 +244,8 @@
     <input type="hidden" name="reviewID" value="<?php echo $_POST['review_to_edit']; ?>"/> 
     <input type="submit" class="btn btn-primary" name="actionBtn" value="Confirm Edit" title="Confirm Edit" />        
   </div>
-  </form>    
+  </form>
+  <?php endif; ?>    
 
   </body>
 </html>

@@ -328,6 +328,21 @@ function createreview($isbn, $username, $title, $body){
     $statement->closeCursor();
 }
 
+function addBookRating($isbn, $username, $overall_stars, $plot, $characters, $writing_style){
+    global $db;
+    $query = "insert into Rating values (:isbn, NULL, :username, :overall_stars, :plot, :characters, :writing_style)";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->bindValue(':username', $username);
+    $statement->bindValue(':overall_stars', $overall_stars);
+    $statement->bindValue(':plot', $plot);
+    $statement->bindValue(':characters', $characters);
+    $statement->bindValue(':writing_style', $writing_style);
+    $statement->execute();
+    $statement->closeCursor();
+}
+
+
 function getRole($username){   
     global $db;
     $query = "select admin from Profile where username=:username";
@@ -394,7 +409,7 @@ function getReviewByID($review_id){
 	return $result;
 }
 
-function getAverageRating($isbn){
+function getAverageOverallRating($isbn){
     global $db;
 	$query = "SELECT AVG(overall_stars) FROM Rating WHERE isbn=:isbn";
     $statement = $db->prepare($query);
@@ -404,6 +419,72 @@ function getAverageRating($isbn){
     $statement->closeCursor();
     return $results;
 
+}
+
+function getAveragePlotRating($isbn){
+    global $db;
+	$query = "SELECT AVG(plot) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+function getAverageCharactersRating($isbn){
+    global $db;
+	$query = "SELECT AVG(characters) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+function getAverageWritingStyleRating($isbn){
+    global $db;
+	$query = "SELECT AVG(writing_style) FROM Rating WHERE isbn=:isbn";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':isbn', $isbn);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+
+}
+
+function getUserBookRating($isbn, $username){
+    //SELECT * FROM Rating WHERE username=:username AND isbn=:isbn
+    global $db;
+	$query = "SELECT * FROM Rating WHERE username=:username AND isbn=:isbn";
+	$statement = $db->prepare($query);
+	$statement->bindValue(':username', $username);
+    $statement->bindValue(':isbn', $isbn);
+	$statement->execute();
+	$result = $statement->fetch();
+	$statement->closeCursor();
+	return $result;
+}
+
+function getAvailabilityStatus($copies_checked_out, $total_copies){
+    global $db;
+	$query = "SELECT status 
+        from Book, CopyInfo 
+        where Book.copies_checked_out = CopyInfo.copies_checked_out 
+            AND Book.total_copies = CopyInfo.total_copies 
+            AND Book.copies_checked_out=:copies_checked_out 
+            AND Book.total_copies=:total_copies";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':copies_checked_out', $copies_checked_out);
+    $statement->bindValue(':total_copies', $total_copies);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
 }
 
 function addFriend($un_1, $un_2){

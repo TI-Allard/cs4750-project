@@ -109,12 +109,23 @@
           <p> Random Thing </p>
       <?php endif; ?>
     </div>
+    <?php if ($thisbook['total_copies'] - $thisbook['copies_checked_out'] != 0): ?>
+      <div>
+          <form name="checkout" action= "profile.php" method="post">
+            <div class="row mb-3 mx-3">
+              <input type="submit" class="btn btn-primary" name="actionBtn" value="Check Out" title="Check Out" />
+              <input type="hidden" name="book_to_checkout" value="<?php echo $thisbook['isbn']; ?>"/>
+              <input type="hidden" name="user_checking_out" value="<?php echo $_SESSION["userN"]; ?>"/>        
+            </div>
+          </form>
+      </div>
+    <?php endif; ?>
     <div>
-        <form name="checkout" action= "profile.php" method="post">
+        <form name="haveRead" action= "profile.php" method="post">
           <div class="row mb-3 mx-3">
-            <input type="submit" class="btn btn-primary" name="actionBtn" value="Check Out" title="Check Out" />
-            <input type="hidden" name="book_to_checkout" value="<?php echo $thisbook['isbn']; ?>"/>
-            <input type="hidden" name="user_checking_out" value="<?php echo $_SESSION["userN"]; ?>"/>        
+            <input type="submit" class="btn btn-primary" name="actionBtn" value="Have Read" title="Have Read" />
+            <input type="hidden" name="book_to_have_read" value="<?php echo $thisbook['isbn']; ?>"/>
+            <input type="hidden" name="user_of_have_read" value="<?php echo $_SESSION["userN"]; ?>"/>        
           </div>
         </form>
     </div>

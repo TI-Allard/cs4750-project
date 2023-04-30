@@ -3,6 +3,8 @@
   require("functions.php");
   session_start();
 
+  $booksreadflag = False; 
+
   if(isset($_POST['us_1']) AND isset($_POST['us_2'])){
     addFriend($_POST['us_1'], $_POST['us_2']);
     echo "added";
@@ -17,6 +19,7 @@
   }
   if(isset($_POST['user_to_view'])){
     $booksread = getBooksRead($_POST['user_to_view']);
+    $booksreadflag = False; 
     $admin = getRole($_POST['user_to_view']); 
     $current_user = $_POST['user_to_view'];
     $friends = getFriends($_POST['user_to_view']);
@@ -24,15 +27,17 @@
   }elseif(isset($_POST['user_to_make_admin'])){
     setAdmin($_POST['user_to_make_admin']);
     $booksread = getBooksRead($_POST['user_to_make_admin']);
+    $booksreadflag = False; 
     $admin = getRole($_POST['user_to_make_admin']); 
     $current_user = $_POST['user_to_make_admin'];
     $friends = getFriends($_POST['user_to_make_admin']);
   }elseif(isset($_SESSION["userN"])){ 
-    $booksread = getBooksRead($_SESSION["userN"]);
+    $booksread = getBooksRead($_SESSION["userN"]);  
+    $booksreadflag = True; 
+    //because you can return a book and it populates hasRead
     $admin = getRole($_SESSION["userN"]);
     $current_user = $_SESSION["userN"];
     $friends = getFriends($_SESSION["userN"]); 
-    $reserves = getReservedBooks($_SESSION["userN"]);
   }
   if(isset($_SESSION["userN"])){
     $admin_logged_in = getRole($_SESSION["userN"]);
@@ -46,11 +51,9 @@
        $totalcopiestemp = $booktocheckout['total_copies']; 
        $copiescheckedouttemp = $booktocheckout['copies_checked_out']; 
 
-       $reserves = getReservedBooks($_POST['user_checking_out']);
+      //  $reserves = getReservedBooks($_POST['user_checking_out']);
 
         // reserveBook($_POST['isbn'], $_POST("user_checking_out")); 
-
-
        echo $_POST["user_checking_out"]; 
        echo "isbn is gonna come next "; 
        echo $_POST['book_to_checkout']; 
@@ -69,7 +72,7 @@
           //yay!!! it works now!!! 
 
 
-          reserveBook($booktocheckout['isbn'], $_POST("user_checking_out")); 
+          reserveBook($booktocheckout['isbn'], $_POST['user_checking_out']); 
           // $reserves = getReservedBooks($_POST['user_checking_out']); 
           echo 'DO I EVEN GET HEREE???'; 
        }
@@ -78,6 +81,20 @@
       }
        
      }
+   }
+   if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Have Read")){
+    if(isset($_SESSION["userN"])){
+      addHasRead($_POST['book_to_have_read'], $_POST['user_of_have_read']); 
+    }
+   }
+   if ((!empty($_POST['actionBtn'])) && ($_POST['actionBtn'] == "Return")){
+    if(isset($_SESSION["userN"])){
+      $book_to_return = getBookByISBN($_POST['returned_book']); 
+      $copies_to_return = $book_to_return['copies_checked_out'] - 1; 
+      echo "this is what it is for copies checked out after $copies_to_return"; 
+      returnBook($book_to_return['isbn'], $copies_to_return); 
+      deleteReservation($book_to_return['isbn'], $current_user); 
+    }
    }
  }
 
@@ -173,6 +190,7 @@ foreach ($friends as $item){
     <th>View</th>
   </tr>
   </thead>
+
 <?php foreach ($booksread as $item): ?>
   <tr>
      <td><?php echo $item['title']; ?></td>
@@ -202,29 +220,32 @@ foreach ($friends as $item){
     </thead>
   <?php foreach ($friends as $item): ?>
     <tr>
+      <?php $friend = NULL; ?>
       <td><?php if(($current_user != $item['username1']) AND ($item['accept'] == TRUE)){
         $friend = $item['username1']; 
       }
       elseif(($current_user == $item['username1']) AND ($item['accept'] == TRUE)){
         $friend = $item['username2']; 
       }
-      echo $friend;
-      ?></td>
-      <td>
-        <?php if($current_user != $item['username1'] AND ($item['accept'] == TRUE)): ?>
+      if($friend <> NULL): 
+        echo $friend;
+        ?></td>
+        <td>
+          <?php if($current_user != $item['username1'] AND ($item['accept'] == TRUE)): ?>
+            <form action="profile.php" method="post">
+              <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
+              <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
+            </form>
+          <?php endif; ?>
+        </td> 
+        <td>
+        <?php if(($friend <> $_SESSION['userN']) AND ($item['accept'] == TRUE)): ?>
           <form action="profile.php" method="post">
-            <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
-            <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
+            <input type="submit" class="btn btn-secondary" name="actionBtn" value="Remove Friend"/>
+            <input type="hidden" name="usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
+            <input type="hidden" name="friend_to_remove" value="<?php echo $friend; ?>"/>
           </form>
         <?php endif; ?>
-      </td> 
-      <td>
-      <?php if(($friend <> $_SESSION['userN']) AND ($item['accept'] == TRUE)): ?>
-        <form action="profile.php" method="post">
-          <input type="submit" class="btn btn-secondary" name="actionBtn" value="Remove Friend"/>
-          <input type="hidden" name="usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
-          <input type="hidden" name="friend_to_remove" value="<?php echo $friend; ?>"/>
-        </form>
       <?php endif; ?>
       </td>            
     </tr>
@@ -287,6 +308,7 @@ foreach ($friends as $item){
 
 <!-- start of reserved books table -->
 <?php if ($admin_logged_in[0]==TRUE OR $current_user==$_SESSION["userN"]): ?>
+  <?php $reserves = getReservedBooks($_SESSION["userN"]); ?> 
   <?php if ($admin_logged_in[0]==TRUE) : ?>
     <?php $reserves = getReservedBooks($_POST['user_to_view']); ?>
   <?php endif; ?>
@@ -311,7 +333,7 @@ foreach ($friends as $item){
         </form>
         <form action="profile.php" method="post">
           <input type="submit" class="btn btn-secondary" name="actionBtn" value="Return"/>
-          <input type="hidden" name="returnedBook" value="<?php echo $item['isbn']; ?>"/>
+          <input type="hidden" name="returned_book" value="<?php echo $item['isbn']; ?>"/>
         </form>
       </td>            
     </tr>
@@ -324,3 +346,4 @@ foreach ($friends as $item){
 
   </body>
 </html>
+

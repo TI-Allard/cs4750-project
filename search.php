@@ -1,11 +1,14 @@
 <?php
   require("connect-db.php");
   require("functions.php");
-  $books = selectAllBooks();
   session_start();
-  if(isset($_POST['isbn'])){
-    deleteBook($_POST['isbn']);
+  $admin_logged_in = [FALSE];
+  if(isset($_POST["submit"])) {
+    $search_term = $_POST["search_term"];
   }
+  
+  $result = searchForBooks($search_term);
+  $books = selectAllBooks();
   if(isset($_SESSION["userN"])){
     $admin_logged_in = getRole($_SESSION["userN"]);
   }

@@ -73,6 +73,7 @@ if(isset($_GET["error"])){
 <!-- add book form -->
 <?php if($admin_logged_in[0] == TRUE): ?>
   <form name="mainForm" action="home.php" method="post"> 
+    <p1> Welcome Admin User! You are allowed to insert books into our library below. Scroll/Search to View Current Books</p1>
     <p2>Starred (*) items are required.</p2>  
     <div class="row mb-3 mx-3">
       ISBN:*

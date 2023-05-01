@@ -139,7 +139,7 @@ if(isset($_GET["error"])){
       <td>
         <form action="home.php" method="post">
           <input type="submit" class="btn btn-danger" name="actionBtn" value="Delete"/>
-          <input type="hidden" name="isbn" value="<?php echo $thisbook['isbn']; ?>"/>
+          <input type="hidden" name="isbn" value="<?php echo $item['isbn']; ?>"/>
         </form>
       </td>
     <?php endif; ?>

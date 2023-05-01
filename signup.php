@@ -89,6 +89,9 @@ session_start();
         else if($_GET["error"] == "passwordtooshort"){
 			echo "<p>Password too short. Needs to be at least 8 characters.</p>";
 		}
+        else if($_GET["error"] == "passwordnotmeetingconstraints"){
+			echo "<p>Password doesn't meet constraints. Needs a lower and uppercase character, a number, and a special character.</p>";
+		}
 		else if($_GET["error"] == "none") {
 			echo "<p>You have successfully signed up.</p>";
 		}

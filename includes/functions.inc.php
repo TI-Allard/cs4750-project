@@ -45,6 +45,18 @@ function pswdLength($pswd) {
     return $result;
 }
 
+function pswdConstraints($pswd) {
+    $pattern = "/[a-z][0-9][\!\@\#\$\%\^\&\*\(\)\_\+\|\~\-]/";
+    $contains = preg_match($pattern, $pswd);
+    if($contains === 1) {
+        $result = false;
+    } else {
+        $result = true;
+    }
+    return $result;
+    
+}
+
 function usernameExists($userN) {
     //$result
     global $db;

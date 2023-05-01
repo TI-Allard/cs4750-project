@@ -35,6 +35,11 @@ if(isset($_POST["submit"])) {
     }
     //echo "help6";
 
+    if(pswdConstraints($pswd) !== false) {
+        header("location: ../signup.php?error=passwordnotmeetingconstraints");
+        exit();
+    }
+
     $hashed_pswd = crypt($pswd, "$1\$sOKLEE3t$");
     createUser($userN, $hashed_pswd);
     //createUser($userN, $pswd);

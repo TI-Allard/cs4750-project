@@ -306,7 +306,7 @@ function getBookByISBN($isbn){
 function searchForBooks($search_term) {
     global $db;
     $search_term = htmlspecialchars($search_term);
-    $query = "select * from Book where (title like '%".$search_term."%')"; //or (author LIKE '%".$search_term."%')";
+    $query = "select * from Book where (title like '%".$search_term."%') or (author LIKE '%".$search_term."%')";
     $statement = $db->prepare($query);
     $statement->bindValue(':search_term', $search_term, PDO::PARAM_STR);
 	$statement->execute();

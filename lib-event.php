@@ -57,6 +57,7 @@
 <!-- end of book table -->
 
 <h3> Reading Events </h3>
+<h5> All times are PM. </h5>
 
 <div class="row justify-content-center">  
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">

@@ -178,7 +178,7 @@ function getReservation($reserve_id){ //idk if i need this
 
 function reserveBook($isbn, $username){
     global $db;
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $query = "insert into Reserves values (NULL, :isbn, :username)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
@@ -190,7 +190,7 @@ function reserveBook($isbn, $username){
 
 function deleteReservation($reserve_id){
     global $db;
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $query = "delete from Reserves where (reserve_id=:reserve_id)";
     //  ON DUPLICATE KEY UPDATE isbn=:isbn, username=:username
     $statement = $db->prepare($query);
@@ -500,7 +500,7 @@ function getAvailabilityStatus($copies_checked_out, $total_copies){
 
 function addFriend($un_1, $un_2){
     global $db;
-    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+    // $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     $query = "insert into FriendOf (friend_id, username1, username2, accept, reject) values (NULL, :username1, :username2, :acc, :rej)";
     $statement = $db->prepare($query);
     $statement->bindValue(':username1', $un_1);
@@ -585,7 +585,7 @@ function invalidDate($date) {
 
 function addBook($isbn, $title, $author, $genre, $date_published, $book_cover, $total_copies, $copies_checked_out, $average_rating){
     global $db;
-    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+    // $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     $query = "insert into Book (isbn, title, author, genre, date_published, book_cover, total_copies, copies_checked_out, average_rating) values (:isbn, :title, :author, :genre, :date_published, :book_cover, :total_copies, :copies_checked_out, :average_rating)";
     $statement = $db->prepare($query);
     $statement->bindValue(':isbn', $isbn);

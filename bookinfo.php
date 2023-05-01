@@ -109,18 +109,6 @@
       <br>
       <?php endif; ?> 
     </p>
-    <div> 
-      <!-- this is going to be testing if else functionality  -->
-      <?php $copies_available = $thisbook['total_copies'] - $thisbook['copies_checked_out']?> 
-      <?php if( $thisbook['copies_checked_out'] < $thisbook['total_copies'] ): ?>
-          <p> Nothing </p>
-          <?php $copies_incremented = $thisbook['copies_checked_out'] + 1 ?>
-          <?php echo $copies_incremented ?> 
-      <?php else: ?>
-          
-          <p> Random Thing </p>
-      <?php endif; ?>
-    </div>
     <?php ?>
     <?php if ($thisbook['total_copies'] - $thisbook['copies_checked_out'] != 0): ?>
       <div>

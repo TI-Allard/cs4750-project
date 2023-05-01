@@ -129,7 +129,7 @@ if($current_user == $_SESSION["userN"]){
   $is_friend = TRUE;
 }else{
   foreach ($friends as $item){
-    if(($item['username1'] == $_SESSION["userN"] OR $item['username2'] == $_SESSION["userN"]) AND $item['accept'] == TRUE){
+    if(($item['username1'] == $_SESSION["userN"] OR $item['username2'] == $_SESSION["userN"]) AND $item['accept'] == TRUE AND $item['reject'] == FALSE){
       $is_friend = TRUE;
     }
   }
@@ -215,17 +215,17 @@ foreach ($friends as $item){
   <?php foreach ($friends as $item): ?>
     <tr>
       <?php $friend = NULL; ?>
-      <td><?php if(($current_user != $item['username1']) AND ($item['accept'] == TRUE)){
+      <td><?php if(($current_user != $item['username1']) AND ($item['accept'] == TRUE) AND ($item['reject'] == FALSE)){
         $friend = $item['username1']; 
       }
-      elseif(($current_user == $item['username1']) AND ($item['accept'] == TRUE)){
+      elseif(($current_user == $item['username1']) AND ($item['accept'] == TRUE) AND ($item['reject'] == FALSE)){
         $friend = $item['username2']; 
       }
       if($friend <> NULL): 
         echo $friend;
         ?></td>
         <td>
-          <?php if($current_user != $item['username1'] AND ($item['accept'] == TRUE)): ?>
+          <?php if($current_user != $item['username1'] AND ($item['accept'] == TRUE) AND ($item['reject'] == FALSE)): ?>
             <form action="profile.php" method="post">
               <input type="submit" class="btn btn-secondary" name="actionBtn" value="View"/>
               <input type="hidden" name="user_to_view" value="<?php echo $friend; ?>"/>
@@ -233,7 +233,7 @@ foreach ($friends as $item){
           <?php endif; ?>
         </td> 
         <td>
-        <?php if(($friend <> $_SESSION['userN']) AND ($item['accept'] == TRUE)): ?>
+        <?php if(($friend <> $_SESSION['userN']) AND ($item['accept'] == TRUE) AND ($item['reject'] == FALSE)): ?>
           <form action="profile.php" method="post">
             <input type="submit" class="btn btn-secondary" name="actionBtn" value="Remove Friend"/>
             <input type="hidden" name="usern_1" value="<?php echo $_SESSION['userN']; ?>"/>
@@ -303,7 +303,7 @@ foreach ($friends as $item){
 <!-- start of reserved books table -->
 <?php if ($admin_logged_in[0]==TRUE OR $current_user==$_SESSION["userN"]): ?>
   <?php $reserves = getReservedBooks($_SESSION["userN"]); ?> 
-  <?php if ($admin_logged_in[0]==TRUE) : ?>
+  <?php if ($admin_logged_in[0]==TRUE  AND $current_user <> $_SESSION["userN"]) : ?>
     <?php $reserves = getReservedBooks($_POST['user_to_view']); ?>
   <?php endif; ?>
   <h4>Reserved Books</h4>

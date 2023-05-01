@@ -35,7 +35,9 @@ if(isset($_POST["submit"])) {
     }
     //echo "help6";
 
-    createUser($userN, $pswd);
+    $hashed_pswd = crypt($pswd, "$1\$sOKLEE3t$");
+    createUser($userN, $hashed_pswd);
+    //createUser($userN, $pswd);
     //echo "help7";
 }
 else {

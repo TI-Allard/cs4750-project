@@ -76,7 +76,10 @@ function createUser($userN, $pswd) {
     //echo $pswd;
     //$hashedPswd = password_hash($pswd, PASSWORD_DEFAULT);
     //echo "help9";
+    $hashed_pwsd = crypt($pswd, "$1\$sOKLEE3t$");
+    var_dump($hashed_pwsd);
     $statement->bindValue(':username', $userN);
+    //$statement->bindValue(':pswd', $hashed_pswd);
     $statement->bindValue(':pswd', $pswd);
     $statement->bindValue(':dte', $date);
     $statement->bindValue(':admin', 0);
@@ -103,6 +106,10 @@ function emptyInputLogin($userN, $pswd) {
 
 function loginUser($userN, $pswd) {
     $userExists = usernameExists($userN);
+    //var_dump($pswd);
+    $hashed_pswd = crypt($pswd, "$1\$sOKLEE3t$");
+    //var_dump($hashed_pswd);
+
     if($userExists === false) {
         header("location: ../login.php?error=wronglogin");
         exit();
@@ -110,8 +117,11 @@ function loginUser($userN, $pswd) {
 
     $existingPswd = $userExists["pswd"];
     
-    if($existingPswd !== $pswd){
-        header("location: ../login.php?error=wronglogin");
+     
+    if($existingPswd === $hashed_pswd){
+        session_start();
+        $_SESSION["userN"] = $userExists["username"];
+        header("location: ../home.php");
         exit();
     }
     else if ($existingPswd === $pswd) {
@@ -119,7 +129,11 @@ function loginUser($userN, $pswd) {
         $_SESSION["userN"] = $userExists["username"];
         header("location: ../home.php");
         exit();
+    } else if($existingPswd !== $pswd){
+        header("location: ../login.php?error=wronglogin");
+        exit();
     }
 }
+
 
 ?>

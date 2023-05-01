@@ -11,6 +11,10 @@ if(isset($_POST["submit"])) {
         header("location: ../login.php?error=emptyinput");
         exit();
     }
+    
+    $hashed_pswd = crypt($pswd, "$1\$sOKLEE3t$");
+    var_dump($hashed_pswd);
+    //loginUser($userN, $hashed_pswd);
     loginUser($userN, $pswd);
 }
 else {
